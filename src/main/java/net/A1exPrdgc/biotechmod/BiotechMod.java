@@ -1,5 +1,6 @@
 package net.A1exPrdgc.biotechmod;
 
+import net.A1exPrdgc.biotechmod.block.ModBlocks;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -32,7 +33,8 @@ public class BiotechMod
         // Register the setup method for modloading
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ModItems.Register(eventBus);
+        ModItems.register(eventBus);
+        ModBlocks.register(eventBus);
 
         eventBus.addListener(this::setup);
         // Register the enqueueIMC method for modloading

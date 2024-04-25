@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XSX",
+    "S#S",
+    "XSX"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "minecraft:oak_log"
+    },
+    "X": {
+      "item": "minecraft:vine"
+    }
+  },
+  "result": {
+    "item": "biotechmod:composite"
+  }
+}

@@ -13,10 +13,10 @@ public class ModItems
 	public static final DeferredRegister<Item> ITEMS =
 			DeferredRegister.create(ForgeRegistries.ITEMS, BiotechMod.MOD_ID);
 
-	public static final RegistryObject<Item> COMPOSITE = ITEMS.register("composite materials",
-			() -> new Item(new Item.Properties().tab(ItemGroup.TAB_MATERIALS)));
+	public static final RegistryObject<Item> COMPOSITE = ITEMS.register("composite",
+			() -> new Item(new Item.Properties().group(ModItemGroup.BIOTECHMOD_GROUP)));
 
-	public static void Register(IEventBus eventBus)
+	public static void register(IEventBus eventBus)
 	{
 		ITEMS.register(eventBus);
 	}
