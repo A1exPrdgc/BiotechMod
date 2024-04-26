@@ -5,6 +5,7 @@ import net.A1exPrdgc.biotechmod.item.ModItemGroup;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -21,9 +22,13 @@ public class ModBlocks
 	public static final DeferredRegister<Block> BLOCKS
 			= DeferredRegister.create(ForgeRegistries.BLOCKS, BiotechMod.MOD_ID);
 
-	public static final RegistryObject<Block> ROOT = registerBlock("root_block",
+	public static final RegistryObject<Block> ROOT_BLOCK = registerBlock("root_block",
 			() -> new Block(AbstractBlock.Properties.create(Material.WOOD)
 					.harvestLevel(1).harvestTool(ToolType.AXE).setRequiresTool().hardnessAndResistance(3f)));
+
+	public static final RegistryObject<Block> ASH_BLOCK = registerBlock("ash_block",
+			() -> new Block(AbstractBlock.Properties.create(Material.SAND)
+					.harvestLevel(0).harvestTool(ToolType.SHOVEL).hardnessAndResistance(0.5F).sound(SoundType.SAND)));
 
 	private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block)
 	{
