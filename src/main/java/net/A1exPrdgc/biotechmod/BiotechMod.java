@@ -4,6 +4,8 @@ import net.A1exPrdgc.biotechmod.block.ModBlocks;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -57,6 +59,9 @@ public class BiotechMod
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
+        event.enqueueWork(() -> {
+            RenderTypeLookup.setRenderLayer(ModBlocks.EXTRACTOR.get(), RenderType.getCutout());
+        });
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)

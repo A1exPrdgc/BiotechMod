@@ -1,5 +1,6 @@
 package net.A1exPrdgc.biotechmod.item;
 
+import net.A1exPrdgc.biotechmod.block.ModBlocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
@@ -11,7 +12,7 @@ public class ModItemGroup
 	{
 		@Nonnull
 		public ItemStack createIcon(){
-			return new ItemStack(ModItems.COMPOSITE.get());
+			return new ItemStack(ModBlocks.EXTRACTOR.get());
 		}
 	};
 }

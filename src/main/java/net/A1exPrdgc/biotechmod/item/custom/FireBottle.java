@@ -51,7 +51,11 @@ public class FireBottle extends Item
 		if (playerIsNotOnFire && blockIsValidForResistance(clickedBlock))
 		{
 			//transforme le bois en cendre ou en charbon
-			changeBlock(playerEntity, context.getWorld(), context.getPos());
+			changeBlock(context);
+			animateTick(context);
+			playSound(context, playerEntity);
+
+
 		}
 		else
 		{
@@ -77,20 +81,41 @@ public class FireBottle extends Item
 		entity.setFire(second);
 	}
 
-	private void changeBlock(PlayerEntity playerEntity, World world, BlockPos pos)
+	private void changeBlock(ItemUseContext context)
 	{
+		World world = context.getWorld();
+		BlockPos pos = context.getPos();
+
+
+		world.removeBlock(pos, true);
+
 		if(random.nextFloat() > 0.8f)
-		{
-			world.removeBlock(pos, true);
 			world.setBlockState(pos, Blocks.COAL_BLOCK.getDefaultState());
-			world.addParticle(ParticleTypes.ASH, pos.getX(), pos.getY(), pos.getZ(), 5, 5, 5);
-		}
 		else
-		{
-			world.removeBlock(pos, true);
 			world.setBlockState(pos, ModBlocks.ASH_BLOCK.get().getDefaultState());
-			world.addParticle(ParticleTypes.ASH, pos.getX(), pos.getY(), pos.getZ(), 5, 5, 5);
+
+	}
+
+
+	private void animateTick(ItemUseContext context)
+	{
+		World world  = context.getWorld();
+		BlockPos pos = context.getPos();
+
+		for (int i=0; i < 360; i++)
+		{
+			if (i % 20 == 0)
+			{
+				world.addParticle(ParticleTypes.ASH,
+						pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5,
+						Math.cos(i) * 0.25, 0.15, Math.sin(i) * 0.25);
+			}
 		}
+	}
+
+	public void playSound(ItemUseContext context, PlayerEntity player)
+	{
+		context.getWorld().playSound(player, context.getPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS ,1.0F, random.nextFloat() * 0.4F + 0.8F);
 	}
 
 	public static void lightGroundOnFire(ItemUseContext context)
