@@ -3,7 +3,7 @@
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "biotechmod:block/extractor",
-		"particle": "minecraft:block/anvil"
+		"particle": "biotechmod:block/extractor"
 	},
 	"elements": [
 		{
@@ -111,6 +111,14 @@
 		}
 	],
 	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
 		"firstperson_righthand": {
 			"scale": [0.5, 0.5, 0.5]
 		},
@@ -123,10 +131,17 @@
 	},
 	"groups": [
 		{
-			"name": "extractor",
+			"name": "VoxelShapes",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"children": [0, 1, 2, 3, 4, 5, 6, 7]
+			"children": [
+				{
+					"name": "extractor",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [0, 1, 2, 3, 4, 5, 6, 7]
+				}
+			]
 		}
 	]
 }
