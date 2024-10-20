@@ -5,6 +5,7 @@
   "item.biotechmod.fire_bottle" : "Fire bottle",
   "block.biotechmod.root_block" : "Root block",
   "block.biotechmod.ash_block" : "Ash block",
-  "block.biotechmod.extractor" : "extractor",
+  "block.biotechmod.extractor" : "Extractor",
+  "block.biotechmod.squeezer" : "Squeezer",
   "itemGroup.biotechModTab" : "Biotech Mod"
 }

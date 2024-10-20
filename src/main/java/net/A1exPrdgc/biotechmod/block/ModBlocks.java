@@ -2,6 +2,7 @@ package net.A1exPrdgc.biotechmod.block;
 
 import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.block.custom.Extractor;
+import net.A1exPrdgc.biotechmod.block.custom.Squeezer;
 import net.A1exPrdgc.biotechmod.item.ModItemGroup;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.minecraft.block.AbstractBlock;
@@ -37,7 +38,11 @@ public class ModBlocks
 
 	public static final RegistryObject<Block> EXTRACTOR = registerBlock("extractor",
 			() -> new Extractor(AbstractBlock.Properties.create(Material.IRON)
-					.harvestLevel(0).notSolid().harvestTool(ToolType.PICKAXE).sound(SoundType.STONE)));
+					.harvestLevel(0).notSolid().hardnessAndResistance(0.4F).harvestTool(ToolType.PICKAXE).sound(SoundType.STONE)));
+
+	public static final RegistryObject<Block> SQUEEZER = registerBlock("squeezer",
+			() -> new Squeezer(AbstractBlock.Properties.create(Material.IRON)
+					.harvestLevel(0).notSolid().hardnessAndResistance(0.4F).harvestTool(ToolType.PICKAXE).sound(SoundType.STONE)));
 
 	private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block)
 	{

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "biotechmod:block/squeezer",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "biotechmod:block/squeezer",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "biotechmod:block/squeezer"
+    },
+    "facing=west": {
+      "model": "biotechmod:block/squeezer",
+      "y": 90
+    }
+  }
+}

@@ -1,9 +1,14 @@
 package net.A1exPrdgc.biotechmod;
 
 import net.A1exPrdgc.biotechmod.block.ModBlocks;
+import net.A1exPrdgc.biotechmod.container.ModContainers;
+import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.item.ModItems;
+import net.A1exPrdgc.biotechmod.screen.SqueezerScreen;
+import net.A1exPrdgc.biotechmod.tileentity.ModTileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,6 +42,8 @@ public class BiotechMod
 
         ModItems.register(eventBus);
         ModBlocks.register(eventBus);
+        ModTileEntities.register(eventBus);
+        ModContainers.register(eventBus);
 
         eventBus.addListener(this::setup);
         // Register the enqueueIMC method for modloading
@@ -61,6 +68,10 @@ public class BiotechMod
         // do something that can only be done on the client
         event.enqueueWork(() -> {
             RenderTypeLookup.setRenderLayer(ModBlocks.EXTRACTOR.get(), RenderType.getCutout());
+            RenderTypeLookup.setRenderLayer(ModBlocks.SQUEEZER.get(), RenderType.getCutout());
+
+            ScreenManager.registerFactory(ModContainers.SQUEEZER_CONTAINER.get(),
+                    SqueezerScreen::new);
         });
     }
 
