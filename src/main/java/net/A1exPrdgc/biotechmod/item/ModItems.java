@@ -1,7 +1,9 @@
 package net.A1exPrdgc.biotechmod.item;
 
 import net.A1exPrdgc.biotechmod.BiotechMod;
+import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.custom.FireBottle;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.potion.EffectInstance;
@@ -30,6 +32,11 @@ public class ModItems
 					.food(new Food.Builder().hunger(5).saturation(.2f)
 							.effect(() -> new EffectInstance(Effects.POISON, 100, 1), 0.75f)
 							.effect(() -> new EffectInstance(Effects.NAUSEA, 300, 2), 0.75f).build())));
+
+
+	public static final RegistryObject<Item> ROOT_BUCKET = ITEMS.register("root_bucket",
+			() -> new BucketItem(() -> ModFluids.ROOT_FLUID.get(),
+					new Item.Properties().maxStackSize(1).group(ModItemGroup.BIOTECHMOD_GROUP)));
 
 
 

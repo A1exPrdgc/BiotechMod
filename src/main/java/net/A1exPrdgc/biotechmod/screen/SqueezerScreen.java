@@ -25,6 +25,8 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
 	}
 
+
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y)
 	{

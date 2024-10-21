@@ -3,6 +3,10 @@ package net.A1exPrdgc.biotechmod;
 import net.A1exPrdgc.biotechmod.block.ModBlocks;
 import net.A1exPrdgc.biotechmod.container.ModContainers;
 import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
+import net.A1exPrdgc.biotechmod.energy.BioEnergizedFlux;
+import net.A1exPrdgc.biotechmod.energy.BioEnergizedFluxStorage;
+import net.A1exPrdgc.biotechmod.energy.IBioEnergizedFlux;
+import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.A1exPrdgc.biotechmod.screen.SqueezerScreen;
 import net.A1exPrdgc.biotechmod.tileentity.ModTileEntities;
@@ -12,6 +16,7 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,6 +49,8 @@ public class BiotechMod
         ModBlocks.register(eventBus);
         ModTileEntities.register(eventBus);
         ModContainers.register(eventBus);
+        ModFluids.register(eventBus);
+
 
         eventBus.addListener(this::setup);
         // Register the enqueueIMC method for modloading
@@ -56,6 +63,8 @@ public class BiotechMod
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
+
+
 
     private void setup(final FMLCommonSetupEvent event)
     {
@@ -72,6 +81,7 @@ public class BiotechMod
 
             ScreenManager.registerFactory(ModContainers.SQUEEZER_CONTAINER.get(),
                     SqueezerScreen::new);
+            CapabilityManager.INSTANCE.register(IBioEnergizedFlux.class, new BioEnergizedFluxStorage(), BioEnergizedFlux::new);
         });
     }
 

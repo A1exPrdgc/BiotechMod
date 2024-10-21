@@ -2,6 +2,7 @@
   "item.biotechmod.composite" : "Composite material",
   "item.biotechmod.root" : "Root",
   "item.biotechmod.ash" : "Ash",
+  "item.biotechmod.root_bucket" : "Root bucket",
   "item.biotechmod.fire_bottle" : "Fire bottle",
   "block.biotechmod.root_block" : "Root block",
   "block.biotechmod.ash_block" : "Ash block",

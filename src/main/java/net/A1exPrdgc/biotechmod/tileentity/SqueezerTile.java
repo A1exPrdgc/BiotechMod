@@ -1,5 +1,7 @@
 package net.A1exPrdgc.biotechmod.tileentity;
 
+import net.A1exPrdgc.biotechmod.BiotechMod;
+import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -10,6 +12,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
