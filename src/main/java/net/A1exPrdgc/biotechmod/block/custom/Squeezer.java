@@ -65,21 +65,16 @@ public class Squeezer extends DirectionalBlock
 					INamedContainerProvider containerProvider = createContainerProvider(worldIn, pos);
 
 					NetworkHooks.openGui(((ServerPlayerEntity) player), containerProvider, tileEntity.getPos());
+
+					((SqueezerTile)tileEntity).liquid_root_creation();
+
+					System.out.println(((SqueezerTile)tileEntity).getFluidInTank(1).getAmount());
 				}
 				else
 				{
 					throw new IllegalStateException("container called is missing");
 				}
 			}
-			/*else
-			{
-				//agit si le joueur n'est pas en sneak
-				if(tileEntity instanceof SqueezerTile)
-				{
-
-				}
-			}*/
-
 		}
 		return ActionResultType.SUCCESS;
 	}

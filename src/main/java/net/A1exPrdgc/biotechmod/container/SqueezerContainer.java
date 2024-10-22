@@ -1,6 +1,8 @@
 package net.A1exPrdgc.biotechmod.container;
 
 import net.A1exPrdgc.biotechmod.block.ModBlocks;
+import net.A1exPrdgc.biotechmod.tileentity.SqueezerTile;
+import net.minecraft.command.arguments.SlotArgument;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -11,6 +13,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -35,15 +39,23 @@ public class SqueezerContainer extends Container
 
 		if(this.tileEntity != null)
 		{
-			tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h ->
+			tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(ih ->
 			{
-				addSlot(new SlotItemHandler(h, 0, 80, 53));
-				addSlot(new SlotItemHandler(h, 1, 39, 31));
-				addSlot(new SlotItemHandler(h, 2, 123, 65));
-				addSlot(new SlotItemHandler(h, 3, 152, 6));
-				addSlot(new SlotItemHandler(h, 4, 152, 26));
-				addSlot(new SlotItemHandler(h, 5, 152, 46));
-				addSlot(new SlotItemHandler(h, 6, 152, 66));
+				addSlot(new SlotItemHandler(ih, 0, 80, 53));
+				addSlot(new SlotItemHandler(ih, 1, 39, 31));
+				addSlot(new SlotItemHandler(ih, 2, 123, 65));
+				addSlot(new SlotItemHandler(ih, 3, 152, 6));
+				addSlot(new SlotItemHandler(ih, 4, 152, 26));
+				addSlot(new SlotItemHandler(ih, 5, 152, 46));
+				addSlot(new SlotItemHandler(ih, 6, 152, 66));
+
+
+			});
+			tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(fh -> {
+
+
+
+
 			});
 		}
 	}
@@ -72,6 +84,10 @@ public class SqueezerContainer extends Container
 		}
 
 		return index;
+	}
+
+	public TileEntity getTileEntity(){
+		return this.tileEntity;
 	}
 
 	private void layoutPlayerInventorySlots(int leftCol, int topRow) {
