@@ -81,7 +81,7 @@ public class BiotechMod
 
             ScreenManager.registerFactory(ModContainers.SQUEEZER_CONTAINER.get(),
                     SqueezerScreen::new);
-            CapabilityManager.INSTANCE.register(IBioEnergizedFlux.class, new BioEnergizedFluxStorage(), BioEnergizedFlux::new);
+            //CapabilityManager.INSTANCE.register(IBioEnergizedFlux.class, new BioEnergizedFluxStorage(), BioEnergizedFlux::new);
         });
     }
 

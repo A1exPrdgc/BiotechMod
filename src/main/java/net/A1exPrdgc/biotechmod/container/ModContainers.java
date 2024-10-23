@@ -1,6 +1,7 @@
 package net.A1exPrdgc.biotechmod.container;
 
 import net.A1exPrdgc.biotechmod.BiotechMod;
+import net.A1exPrdgc.biotechmod.tileentity.SqueezerTile;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,8 +20,8 @@ public class ModContainers
 			= CONTAINERS.register("squeezer_container",
 			() -> IForgeContainerType.create(((windowId, inv, data) -> {
 				BlockPos pos = data.readBlockPos();
-				World world = inv.player.getEntityWorld();
-				return new SqueezerContainer(windowId, world, pos, inv, inv.player);
+				SqueezerTile tile = ((SqueezerTile)inv.player.world.getTileEntity(pos));
+				return new SqueezerContainer(windowId, inv, inv.player, tile);
 			})));
 
 	public static void register(IEventBus eventbus)

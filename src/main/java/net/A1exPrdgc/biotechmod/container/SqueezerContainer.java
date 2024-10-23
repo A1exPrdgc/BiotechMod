@@ -24,15 +24,15 @@ import javax.annotation.Nullable;
 
 public class SqueezerContainer extends Container
 {
-	private final TileEntity tileEntity;
+	public final SqueezerTile tileEntity;
 	private final PlayerEntity playerEntity;
 	private final IItemHandler playerInventory;
 
-	public SqueezerContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player)
+	public SqueezerContainer(int windowId, PlayerInventory playerInventory, PlayerEntity player, SqueezerTile tile)
 	{
 		super(ModContainers.SQUEEZER_CONTAINER.get(), windowId);
-		this.tileEntity = world.getTileEntity(pos);
-		playerEntity = player;
+		this.tileEntity = tile;
+		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(playerInventory);
 
 		layoutPlayerInventorySlots(8, 86);
@@ -48,14 +48,6 @@ public class SqueezerContainer extends Container
 				addSlot(new SlotItemHandler(ih, 4, 152, 26));
 				addSlot(new SlotItemHandler(ih, 5, 152, 46));
 				addSlot(new SlotItemHandler(ih, 6, 152, 66));
-
-
-			});
-			tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(fh -> {
-
-
-
-
 			});
 		}
 	}
@@ -86,16 +78,19 @@ public class SqueezerContainer extends Container
 		return index;
 	}
 
-	public TileEntity getTileEntity(){
-		return this.tileEntity;
-	}
-
 	private void layoutPlayerInventorySlots(int leftCol, int topRow) {
 		addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
 
 		topRow += 58;
 		addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
 	}
+
+	@Override
+	public String toString(){
+		return  "qa : " + this.tileEntity.getFluidInTank(1).getAmount() + "\n" +
+				"fl : " + this.tileEntity.getFluidInTank(1).getFluid()  + "\n";
+	}
+
 	//----------------------------------------------------
 
 	// CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons

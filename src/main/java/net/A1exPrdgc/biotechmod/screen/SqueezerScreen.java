@@ -34,8 +34,6 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks){
 
-		final SqueezerTile squeezertile = (SqueezerTile) this.container.getTileEntity();
-
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
@@ -51,38 +49,24 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 		int i = this.guiLeft;
 		int j = this.guiTop;
 
-		final SqueezerTile squeezertile = (SqueezerTile) container.getTileEntity();
-		final FluidTank tank = squeezertile.getTank();
-
-		if(!squeezertile.getTank().isEmpty())
+		final SqueezerTile squeezertile = container.tileEntity;
+		System.out.println(container);
+		if(squeezertile.getTank().getFluidInTank(1).getAmount() > 0)
 		{
-			Fluid fluid = tank.getFluid().getFluid();
+			System.out.println("phase 1");
+			Fluid fluid = squeezertile.tank.getFluid().getFluid();
 			TextureAtlasSprite fluidTexture1 = (TextureAtlasSprite)(minecraft.getAtlasSpriteGetter(fluid.getRegistryName()));
 			this.minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-			float fluidPercentage = (float) tank.getFluidAmount() / (float) tank.getCapacity();
+			float fluidPercentage = (float) squeezertile.tank.getFluidAmount() / (float) squeezertile.tank.getCapacity();
 			int fluidHeight = (int) Math.ceil(fluidPercentage * (float) fluidbar.height);
 			this.blit(matrixStack, fluidbar.x + i, fluidbar.y + j + (fluidbar.height - fluidbar.width),0, fluidbar.width, fluidHeight, fluidTexture1);
+			System.out.println("blited");
 
 		}
 
 		RenderSystem.color4f(1f, 1f, 1f, 1f);
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
-
-		if(!tank.isEmpty())
-		{
-
-			int fluidStored = getFluidInTank(squeezertile);
-			FluidStack fluidStack = tank.getFluid();
-			if(fluidStack.getFluid() != Fluids.EMPTY)
-			{
-				int color = fluidStack.getFluid().getAttributes().getColor();
-				GlStateManager.color4f(1.0f, 1.0f, 1.0f, color);
-			}
-		}
-
-
 		//condition pour le lancement de la fabrication (animation flèche)
-		//if(container)
 	}
 
 	private int getFluidInTank(SqueezerTile squeezertile) {

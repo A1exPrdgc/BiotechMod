@@ -16,7 +16,6 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.apache.commons.lang3.concurrent.Computable;
 
 import javax.annotation.Nonnull;
 
@@ -25,12 +24,13 @@ public class SqueezerTile extends TileEntity implements IFluidHandler
 	//-----------Obligatoire------------
 	private final ItemStackHandler itemHandler = createHandler();
 	private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
-	private final FluidTank tank = new FluidTank(200_000);;
+	public final FluidTank tank = new FluidTank(200_000);;
 
 	private int cookingTime;
 	private int totalCookingTime;
 
 	private static final String NBTFLUID= "liq";
+	private static final  String NBTINV = "inv";
 
 	public SqueezerTile(TileEntityType<?> tileEntityTypeIn){
 		super(tileEntityTypeIn);
@@ -44,7 +44,7 @@ public class SqueezerTile extends TileEntity implements IFluidHandler
 	@Override
 	public void read(BlockState state, CompoundNBT nbt)
 	{
-		itemHandler.deserializeNBT(nbt.getCompound("inv"));
+		itemHandler.deserializeNBT(nbt.getCompound(NBTINV));
 		tank.readFromNBT(nbt.getCompound(NBTFLUID));
 		super.read(state, nbt);
 	}
@@ -55,7 +55,7 @@ public class SqueezerTile extends TileEntity implements IFluidHandler
 
 	@Override
 	public CompoundNBT write(CompoundNBT compound){
-		compound.put("inv", itemHandler.serializeNBT());
+		compound.put(NBTINV, itemHandler.serializeNBT());
 
 		CompoundNBT fluid = new CompoundNBT();
 		tank.writeToNBT(fluid);
@@ -166,10 +166,17 @@ public class SqueezerTile extends TileEntity implements IFluidHandler
 
 			//ajoute le liquide
 			this.tank.fill(new FluidStack(ModFluids.ROOT_FLUID.get(), 250), FluidAction.EXECUTE);
+
+			System.out.println(this.getFluidInTank(1).getAmount());
 		}
 	}
 
-
+	@Override
+	public String toString(){
+		return  "tanks : " + this.getTanks() + "\n" +
+				"quant : " + this.getFluidInTank(1).getAmount() + "\n" +
+				"fluid : " + this.getFluidInTank(1).getFluid().getFluid() + "\n";
+	}
 
 	//---------------------------------
 

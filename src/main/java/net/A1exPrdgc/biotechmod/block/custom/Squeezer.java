@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 public class Squeezer extends DirectionalBlock
 {
 
+	private SqueezerTile tileEntity;
 	public Squeezer(Properties properties)
 	{
 		super(properties);
@@ -54,7 +55,7 @@ public class Squeezer extends DirectionalBlock
 		//vérifie que le serveur répond
 		if(!worldIn.isRemote())
 		{
-			TileEntity tileEntity= worldIn.getTileEntity(pos);
+			this.tileEntity = (SqueezerTile)worldIn.getTileEntity(pos);
 
 			//vérifie que le joueur n'est pas en sneak
 			if(!player.isCrouching())
@@ -68,7 +69,7 @@ public class Squeezer extends DirectionalBlock
 
 					((SqueezerTile)tileEntity).liquid_root_creation();
 
-					System.out.println(((SqueezerTile)tileEntity).getFluidInTank(1).getAmount());
+					System.out.println("azerty : " + ((SqueezerTile)tileEntity).getFluidInTank(1).getAmount());
 				}
 				else
 				{
@@ -89,7 +90,7 @@ public class Squeezer extends DirectionalBlock
 			@Nullable
 			@Override
 			public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-				return new SqueezerContainer(i, worldIn, pos, playerInventory, playerEntity);
+				return new SqueezerContainer(i, playerInventory, playerEntity, tileEntity);
 			}
 		};
 	}
