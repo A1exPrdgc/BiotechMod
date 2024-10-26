@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.capabilities.Capability;
@@ -19,15 +20,18 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
-public class SqueezerTile extends TileEntity implements IFluidHandler
+public class SqueezerTile extends TileEntity implements IFluidHandler, ITickableTileEntity
 {
+	//-----------Constants--------------
+	private static final int COOKING_TIME = 5;
+
 	//-----------Obligatoire------------
 	private final ItemStackHandler itemHandler = createHandler();
 	private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
-	public final FluidTank tank = new FluidTank(200_000);;
+	public final FluidTank tank = new FluidTank(200_000);
 
-	private int cookingTime;
-	private int totalCookingTime;
+	private boolean isActive = true;
+	private int timer = 0;
 
 	private static final String NBTFLUID= "liq";
 	private static final  String NBTINV = "inv";
@@ -100,6 +104,8 @@ public class SqueezerTile extends TileEntity implements IFluidHandler
 		};
 	}
 
+
+
 	@Nonnull
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap){
@@ -151,12 +157,16 @@ public class SqueezerTile extends TileEntity implements IFluidHandler
 		return this.tank.drain(maxDrain, action);
 	}
 
+
+	public boolean canCook()
+	{
+		return this.itemHandler.getStackInSlot(1).getCount() > 0 &&
+				this.itemHandler.getStackInSlot(1).getItem()  == ModItems.ROOT.get();
+	}
 	public void liquid_root_creation()
 	{
-		boolean hasRoot = this.itemHandler.getStackInSlot(1).getCount() > 0 &&
-				          this.itemHandler.getStackInSlot(1).getItem()  == ModItems.ROOT.get();
 
-		if(hasRoot)
+		if(this.canCook())
 		{
 			//retire l'item
 			this.itemHandler.getStackInSlot(1).shrink(1);
@@ -176,6 +186,23 @@ public class SqueezerTile extends TileEntity implements IFluidHandler
 		return  "tanks : " + this.getTanks() + "\n" +
 				"quant : " + this.getFluidInTank(1).getAmount() + "\n" +
 				"fluid : " + this.getFluidInTank(1).getFluid().getFluid() + "\n";
+	}
+
+	@Override
+	public void tick(){
+		if (!world.isRemote() && this.isActive && this.canCook()){
+			System.out.println(this.timer);
+			this.timer++;
+			if (this.timer > 20 * COOKING_TIME){
+				this.timer = 0;
+
+				this.liquid_root_creation();
+			}
+		}
+	}
+
+	public int getTimer(){
+		return this.timer;
 	}
 
 	//---------------------------------

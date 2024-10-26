@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -52,6 +53,11 @@ public class SqueezerContainer extends Container
 		}
 	}
 
+	public int getTimer()
+	{
+		return tileEntity.getTimer();
+	}
+
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn){
 		return isWithinUsableDistance(IWorldPosCallable.of(
@@ -85,11 +91,11 @@ public class SqueezerContainer extends Container
 		addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
 	}
 
-	@Override
+	/*@Override
 	public String toString(){
 		return  "qa : " + this.tileEntity.getFluidInTank(1).getAmount() + "\n" +
 				"fl : " + this.tileEntity.getFluidInTank(1).getFluid()  + "\n";
-	}
+	}*/
 
 	//----------------------------------------------------
 

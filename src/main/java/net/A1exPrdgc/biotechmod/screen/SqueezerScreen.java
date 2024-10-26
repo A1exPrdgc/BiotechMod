@@ -44,40 +44,14 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y)
 	{
-
+		RenderSystem.color4f(1f, 1f, 1f, 1f);
 		this.minecraft.getTextureManager().bindTexture(GUI);
 		int i = this.guiLeft;
 		int j = this.guiTop;
-
-		final SqueezerTile squeezertile = container.tileEntity;
-		System.out.println(container);
-		if(squeezertile.getTank().getFluidInTank(1).getAmount() > 0)
-		{
-			System.out.println("phase 1");
-			Fluid fluid = squeezertile.tank.getFluid().getFluid();
-			TextureAtlasSprite fluidTexture1 = (TextureAtlasSprite)(minecraft.getAtlasSpriteGetter(fluid.getRegistryName()));
-			this.minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-			float fluidPercentage = (float) squeezertile.tank.getFluidAmount() / (float) squeezertile.tank.getCapacity();
-			int fluidHeight = (int) Math.ceil(fluidPercentage * (float) fluidbar.height);
-			this.blit(matrixStack, fluidbar.x + i, fluidbar.y + j + (fluidbar.height - fluidbar.width),0, fluidbar.width, fluidHeight, fluidTexture1);
-			System.out.println("blited");
-
-		}
-
-		RenderSystem.color4f(1f, 1f, 1f, 1f);
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+
+
+
 		//condition pour le lancement de la fabrication (animation flèche)
-	}
-
-	private int getFluidInTank(SqueezerTile squeezertile) {
-
-		/*
-		 * First getFluid() -> returns the fluidStack
-		 * Second getFluid() -> returns the fluid
-		 */
-		if(squeezertile.getTank().getFluid().isEmpty())
-			return 0;
-
-		return squeezertile.getTank().getFluidAmount()/squeezertile.getTank().getCapacity() * 74;
 	}
 }

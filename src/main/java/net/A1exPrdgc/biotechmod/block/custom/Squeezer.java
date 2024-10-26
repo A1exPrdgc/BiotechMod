@@ -24,6 +24,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -57,24 +59,18 @@ public class Squeezer extends DirectionalBlock
 		{
 			this.tileEntity = (SqueezerTile)worldIn.getTileEntity(pos);
 
-			//vérifie que le joueur n'est pas en sneak
-			if(!player.isCrouching())
+			//agit si le joueur est en sneak
+			if (tileEntity instanceof SqueezerTile)
 			{
-				//agit si le joueur est en sneak
-				if(tileEntity instanceof SqueezerTile)
-				{
-					INamedContainerProvider containerProvider = createContainerProvider(worldIn, pos);
+				INamedContainerProvider containerProvider = createContainerProvider(worldIn, pos);
 
-					NetworkHooks.openGui(((ServerPlayerEntity) player), containerProvider, tileEntity.getPos());
+				NetworkHooks.openGui(((ServerPlayerEntity) player), containerProvider, tileEntity.getPos());
 
-					((SqueezerTile)tileEntity).liquid_root_creation();
-
-					System.out.println("azerty : " + ((SqueezerTile)tileEntity).getFluidInTank(1).getAmount());
-				}
-				else
-				{
-					throw new IllegalStateException("container called is missing");
-				}
+				System.out.println("azerty : " + tileEntity.getFluidInTank(1).getAmount());
+			}
+			else
+			{
+				throw new IllegalStateException("container called is missing");
 			}
 		}
 		return ActionResultType.SUCCESS;
