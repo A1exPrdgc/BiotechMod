@@ -66,7 +66,7 @@ public class Squeezer extends DirectionalBlock
 
 				NetworkHooks.openGui(((ServerPlayerEntity) player), containerProvider, tileEntity.getPos());
 
-				System.out.println("azerty : " + tileEntity.getFluidInTank(1).getAmount());
+				System.out.println("azerty : " + tileEntity.getTank().getFluidAmount());
 			}
 			else
 			{

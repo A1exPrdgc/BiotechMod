@@ -11,6 +11,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -28,6 +29,7 @@ public class SqueezerContainer extends Container
 	public final SqueezerTile tileEntity;
 	private final PlayerEntity playerEntity;
 	private final IItemHandler playerInventory;
+	private final IntArray data = new IntArray(2);
 
 	public SqueezerContainer(int windowId, PlayerInventory playerInventory, PlayerEntity player, SqueezerTile tile)
 	{
@@ -36,10 +38,19 @@ public class SqueezerContainer extends Container
 		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(playerInventory);
 
+
+		this.data.set(0, this.tileEntity.getTank().getCapacity());
+		this.data.set(1, this.tileEntity.getTank().getFluidAmount());
+
+		System.out.println(tileEntity.getWorld() != null && !tileEntity.getWorld().isRemote ? "Container côté serveur : " + this.data.get(1) : "Container côté client : " + this.data.get(1));
+
+		trackIntArray(this.data);
+
 		layoutPlayerInventorySlots(8, 86);
 
-		if(this.tileEntity != null)
+		if(this.tileEntity instanceof SqueezerTile)
 		{
+
 			tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(ih ->
 			{
 				addSlot(new SlotItemHandler(ih, 0, 80, 53));
@@ -58,10 +69,22 @@ public class SqueezerContainer extends Container
 		return tileEntity.getTimer();
 	}
 
+	public IntArray getDataArray(){
+		return data;
+	}
+
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn){
 		return isWithinUsableDistance(IWorldPosCallable.of(
 				tileEntity.getWorld(), tileEntity.getPos()), playerIn, ModBlocks.SQUEEZER.get());
+	}
+
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+
+		this.data.set(0, tileEntity.getTank().getCapacity());
+		this.data.set(1, tileEntity.getTank().getFluidAmount());
 	}
 
 	//--------------------Gestion de l'inventaire----------------------
@@ -89,6 +112,10 @@ public class SqueezerContainer extends Container
 
 		topRow += 58;
 		addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
+	}
+
+	public SqueezerTile getTileEntity(){
+		return this.tileEntity;
 	}
 
 	/*@Override

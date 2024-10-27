@@ -25,10 +25,10 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 	private final ResourceLocation GUI = new ResourceLocation(BiotechMod.MOD_ID,
 			"textures/gui/squeezer_gui.png");
 
-	protected Rectangle fluidbar = new Rectangle(122, 14, 18, 47);
-
 	public SqueezerScreen(SqueezerContainer screenContainer, PlayerInventory inv, ITextComponent titleIn){
 		super(screenContainer, inv, titleIn);
+		this.getContainer().detectAndSendChanges();
+
 	}
 
 	@Override
@@ -44,6 +44,8 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y)
 	{
+		this.getContainer().detectAndSendChanges();
+		System.out.println("test : " + this.getContainer().getDataArray().get(1));
 		RenderSystem.color4f(1f, 1f, 1f, 1f);
 		this.minecraft.getTextureManager().bindTexture(GUI);
 		int i = this.guiLeft;
