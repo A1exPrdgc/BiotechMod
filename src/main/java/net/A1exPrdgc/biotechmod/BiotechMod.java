@@ -10,11 +10,14 @@ import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.A1exPrdgc.biotechmod.screen.SqueezerScreen;
 import net.A1exPrdgc.biotechmod.tileentity.ModTileEntities;
+import net.A1exPrdgc.biotechmod.util.PacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
@@ -51,6 +54,8 @@ public class BiotechMod
         ModContainers.register(eventBus);
         ModFluids.register(eventBus);
 
+        PacketHandler.register();
+
 
         eventBus.addListener(this::setup);
         // Register the enqueueIMC method for modloading
@@ -79,8 +84,8 @@ public class BiotechMod
             RenderTypeLookup.setRenderLayer(ModBlocks.EXTRACTOR.get(), RenderType.getCutout());
             RenderTypeLookup.setRenderLayer(ModBlocks.SQUEEZER.get(), RenderType.getCutout());
 
-            ScreenManager.registerFactory(ModContainers.SQUEEZER_CONTAINER.get(),
-                    SqueezerScreen::new);
+            ScreenManager.registerFactory(ModContainers.SQUEEZER_CONTAINER.get(), SqueezerScreen::new);
+
             //CapabilityManager.INSTANCE.register(IBioEnergizedFlux.class, new BioEnergizedFluxStorage(), BioEnergizedFlux::new);
         });
     }

@@ -1,15 +1,23 @@
 package net.A1exPrdgc.biotechmod.tileentity;
 
+import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -21,8 +29,9 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class SqueezerTile extends TileEntity implements ITickableTileEntity
+public class SqueezerTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider
 {
 	//-----------Constants--------------
 	private static final int COOKING_TIME = 5;
@@ -35,6 +44,7 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity
 
 	private boolean isActive = true;
 	private int timer = 0;
+	private IntArray data = new IntArray(2);
 
 	/*-----------------NBT---------------*/
 	private static final String NBTFLUID= "liq";
@@ -42,13 +52,10 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity
 
 
 	/*-------------Constructors-----------*/
-	public SqueezerTile(TileEntityType<?> tileEntityTypeIn){
-		super(tileEntityTypeIn);
-	}
 
 	public SqueezerTile()
 	{
-		this(ModTileEntities.SQUEEZER.get());
+		super(ModTileEntities.SQUEEZER.get());
 	}
 
 
@@ -180,9 +187,6 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity
 	public FluidTank getTank(){
 		return tank;
 	}
-	public int getTimer(){
-		return this.timer;
-	}
 	/*---------------------------------------*/
 
 
@@ -205,21 +209,11 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity
 			//retire l'item
 			this.itemHandler.getStackInSlot(1).shrink(1);
 
-			//retire l'énergie
-			///////////////////////////////////////////////////////////////////////////////////////////////////////
-
 			//ajoute le liquide
 			this.tank.fill(new FluidStack(ModFluids.ROOT_FLUID.get(), 250), IFluidHandler.FluidAction.EXECUTE);
 
 			System.out.println(this.tank.getFluidInTank(1).getAmount());
 		}
-	}
-
-	@Override
-	public String toString(){
-		return  "tanks : " + this.tank.getTanks() + "\n" +
-				"quant : " + this.tank.getFluidInTank(1).getAmount() + "\n" +
-				"fluid : " + this.tank.getFluidInTank(1).getFluid().getFluid() + "\n";
 	}
 
 	@Override
@@ -231,12 +225,22 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity
 				this.timer = 0;
 
 				this.liquid_root_creation();
+				this.data.set(1, this.tank.getFluidAmount());
 			}
-			BlockState state = world.getBlockState(this.pos);
-			world.notifyBlockUpdate(this.pos, state, state, 2);
 		}
 	}
 
+	@Override
+	public ITextComponent getDisplayName(){
+		return new TranslationTextComponent("Squeezer");
+	}
+
+	@Nullable
+	@Override
+	public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity){
+		System.out.println("whot 1");
+		return new SqueezerContainer(i, this.world, this.pos, playerInventory, playerEntity, data);
+	}
 
 
 	//---------------------------------
