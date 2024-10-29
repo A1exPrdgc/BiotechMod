@@ -38,7 +38,7 @@ public class SqueezerContainer extends Container
 
 	public SqueezerContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		this(windowId, world, pos, playerInventory, player, new IntArray(2));
+		this(windowId, world, pos, playerInventory, player, new IntArray(3));
 	}
 
 	public SqueezerContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player, IntArray data)
@@ -52,8 +52,9 @@ public class SqueezerContainer extends Container
 		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(playerInventory);
 
-		this.data.set(0, this.tileEntity.getTank().getCapacity());
-		this.data.set(1, this.tileEntity.getTank().getFluidAmount());
+		this.setData(0, this.tileEntity.getItemHandler().getStackInSlot(1).getCount()); // nombre d'item dans le slot 1
+		this.setData(1, this.tileEntity.getTank().getFluidAmount());                    // quantité de fluid ans le tank
+		this.setData(2, this.tileEntity.getTimer());                                    // timer
 
 
 		System.out.println(tileEntity.getWorld() != null && !tileEntity.getWorld().isRemote ? "Container côté serveur : " + this.data.get(1) : "Container côté client : " + this.data.get(1));
@@ -66,19 +67,30 @@ public class SqueezerContainer extends Container
 
 			tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(ih ->
 			{
-				addSlot(new SlotItemHandler(ih, 0, 80, 53));
-				addSlot(new SlotItemHandler(ih, 1, 39, 31));
-				addSlot(new SlotItemHandler(ih, 2, 123, 65));
-				addSlot(new SlotItemHandler(ih, 3, 152, 6));
-				addSlot(new SlotItemHandler(ih, 4, 152, 26));
-				addSlot(new SlotItemHandler(ih, 5, 152, 46));
-				addSlot(new SlotItemHandler(ih, 6, 152, 66));
+				SlotItemHandler[] tab = new SlotItemHandler[]{
+						new SlotItemHandler(ih, 0, 80, 53),  // slot sous flèche
+						new SlotItemHandler(ih, 1, 39, 31),  // slot tout à gauche
+						new SlotItemHandler(ih, 2, 123, 65), // slot seau
+						new SlotItemHandler(ih, 3, 152, 6),  // slot upgrade 1
+						new SlotItemHandler(ih, 4, 152, 26), // slot upgrade 2
+						new SlotItemHandler(ih, 5, 152, 46), // slot upgrade 3
+						new SlotItemHandler(ih, 6, 152, 66)  // slot upgrade 4
+				};
+
+				for (int i=0; i < tab.length; i++) {
+					addSlot(tab[i]);
+				}
+
 			});
 		}
 	}
 
 	public IntArray getDataArray(){
 		return data;
+	}
+
+	public SqueezerTile getTileEntity(){
+		return tileEntity;
 	}
 
 	public void setData(int index, int value){

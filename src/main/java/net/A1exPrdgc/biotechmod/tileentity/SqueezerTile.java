@@ -1,5 +1,6 @@
 package net.A1exPrdgc.biotechmod.tileentity;
 
+import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
@@ -10,6 +11,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.MinecartItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -20,6 +22,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -34,8 +38,10 @@ import javax.annotation.Nullable;
 public class SqueezerTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider
 {
 	//-----------Constants--------------
-	private static final int COOKING_TIME = 5;
-	private static final int CAPACITY = 20_000;
+	public static final int TICK_VALUE = 20;
+	public static final int COOKING_TIME = 5;
+	public static final int COOKING_TIME_TICK = COOKING_TIME * TICK_VALUE;
+	public static final int CAPACITY = 20_000;
 
 	//-----------Obligatoire------------
 	private final ItemStackHandler itemHandler = createHandler();
@@ -44,7 +50,7 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 
 	private boolean isActive = true;
 	private int timer = 0;
-	private IntArray data = new IntArray(2);
+	private IntArray data = new IntArray(3);
 
 	/*-----------------NBT---------------*/
 	private static final String NBTFLUID= "liq";
@@ -93,7 +99,7 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack){
 				switch(slot)
 				{
-					case 2  : return stack.getItem() == Items.BUCKET;
+					case 2  : return stack.getItem() == Items.BUCKET || stack.getItem() == ModItems.ROOT_BUCKET.get();
 					case 1  : return stack.getItem() == ModItems.ROOT.get();
 					default : return false;
 				}
@@ -101,7 +107,11 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 
 			@Override
 			public int getSlotLimit(int slot){
-				return  1;
+				switch(slot)
+				{
+					case 1 : return 64;
+					default: return 1;
+				}
 			}
 
 			@Nonnull
@@ -187,6 +197,15 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 	public FluidTank getTank(){
 		return tank;
 	}
+
+	public int getTimer(){
+		return timer;
+	}
+
+	public ItemStackHandler getItemHandler(){
+		return itemHandler;
+	}
+
 	/*---------------------------------------*/
 
 
@@ -200,6 +219,23 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 	{
 		return this.itemHandler.getStackInSlot(1).getCount() > 0 &&
 				this.itemHandler.getStackInSlot(1).getItem()  == ModItems.ROOT.get();
+	}
+
+	public boolean canFill()
+	{
+		return  this.itemHandler.getStackInSlot(2).getCount() > 0 &&
+				this.itemHandler.getStackInSlot(2).getItem() == Items.BUCKET &&
+				this.data.get(1) >= FluidAttributes.BUCKET_VOLUME ;
+	}
+
+	public void fillBucket()
+	{
+		if(this.canFill())
+		{
+			this.itemHandler.getStackInSlot(2).shrink(1);
+			this.itemHandler.insertItem(2, new ItemStack(ModItems.ROOT_BUCKET.get()), false);
+			this.tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+		}
 	}
 	public void liquid_root_creation()
 	{
@@ -218,13 +254,31 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 
 	@Override
 	public void tick(){
-		if (!world.isRemote() && this.isActive && this.canCook()){
-			System.out.println(this.timer);
-			this.timer++;
-			if (this.timer > 20 * COOKING_TIME){
-				this.timer = 0;
+		if (!world.isRemote() && this.isActive)
+		{
+			this.data.set(0, this.itemHandler.getStackInSlot(1).getCount());
 
-				this.liquid_root_creation();
+			if(this.canCook() && this.data.get(1) + 250 <= SqueezerTile.CAPACITY)
+			{
+				this.timer++;
+
+				this.data.set(2, this.timer);
+
+				if (this.timer >= COOKING_TIME_TICK)
+				{
+					this.timer = 0;
+
+					this.liquid_root_creation();
+					this.data.set(2, this.timer);
+					this.data.set(1, this.tank.getFluidAmount());
+				}
+			}
+
+			if( this.canFill() &&
+				this.data.get(1) >= FluidAttributes.BUCKET_VOLUME &&
+				this.itemHandler.getStackInSlot(2).getItem() == Items.BUCKET)
+			{
+				this.fillBucket();
 				this.data.set(1, this.tank.getFluidAmount());
 			}
 		}
