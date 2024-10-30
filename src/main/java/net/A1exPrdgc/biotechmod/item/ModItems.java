@@ -3,6 +3,7 @@ package net.A1exPrdgc.biotechmod.item;
 import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.custom.FireBottle;
+import net.A1exPrdgc.biotechmod.item.custom.Syringe;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
@@ -23,6 +24,9 @@ public class ModItems
 
 	public static final RegistryObject<Item> ASH = ITEMS.register("ash",
 			() -> new Item(new Item.Properties().group(ModItemGroup.BIOTECHMOD_GROUP)));
+
+	public static final RegistryObject<Item> SYRINGE = ITEMS.register("syringe",
+			() -> new Syringe(new Item.Properties().group(ModItemGroup.BIOTECHMOD_GROUP).maxDamage(12)));
 
 	public static final RegistryObject<Item> FIRE_BOTTLE = ITEMS.register("fire_bottle",
 			() -> new FireBottle(new Item.Properties().group(ModItemGroup.BIOTECHMOD_GROUP).maxDamage(12)));

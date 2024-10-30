@@ -16,6 +16,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
@@ -86,7 +87,7 @@ public class BiotechMod
 
             ScreenManager.registerFactory(ModContainers.SQUEEZER_CONTAINER.get(), SqueezerScreen::new);
 
-            //CapabilityManager.INSTANCE.register(IBioEnergizedFlux.class, new BioEnergizedFluxStorage(), BioEnergizedFlux::new);
+            CapabilityManager.INSTANCE.register(IBioEnergizedFlux.class, new BioEnergizedFluxStorage(), BioEnergizedFlux::new);
         });
     }
 

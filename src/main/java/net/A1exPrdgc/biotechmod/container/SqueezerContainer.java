@@ -57,7 +57,7 @@ public class SqueezerContainer extends Container
 		this.setData(2, this.tileEntity.getTimer());                                    // timer
 
 
-		System.out.println(tileEntity.getWorld() != null && !tileEntity.getWorld().isRemote ? "Container côté serveur : " + this.data.get(1) : "Container côté client : " + this.data.get(1));
+		//System.out.println(tileEntity.getWorld() != null && !tileEntity.getWorld().isRemote ? "Container côté serveur : " + this.data.get(1) : "Container côté client : " + this.data.get(1));
 
 
 		layoutPlayerInventorySlots(8, 86);
