@@ -2,6 +2,7 @@ package net.A1exPrdgc.biotechmod.item.custom;
 
 import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.block.ModBlocks;
+import net.A1exPrdgc.biotechmod.energy.BioEnergizedFlux;
 import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.minecraft.block.BlockState;
@@ -18,6 +19,8 @@ import java.util.Objects;
 
 public class Syringe extends Item
 {
+
+	private boolean full;
 	public Syringe(Properties properties){
 		super(properties);
 	}
@@ -31,10 +34,18 @@ public class Syringe extends Item
 			PlayerEntity playerEntity =Objects.requireNonNull(context.getPlayer());
 			BlockState clickedBlock = world.getBlockState(context.getPos());
 
-			System.out.println("(" + stack.getMaxDamage() + " - " + stack.getDamage() + ") + 1 = " + ((stack.getMaxDamage() - stack.getDamage()) + 1));
-			stack.setDamage((stack.getMaxDamage() - stack.getDamage()) + 1);
+			if(!stack.isDamaged() && !this.full)
+			{
+				stack.setDamage(stack.getMaxDamage());
+			}
+			else
+			{
+				stack.setDamage(stack.getDamage() - 1);
+				if(stack.getDamage() == 0){
+					this.full = true;
+				}
+			}
 
-			RightClickOnCertainBlockState(clickedBlock, context, playerEntity);
 		}
 
 
@@ -55,5 +66,7 @@ public class Syringe extends Item
 		return  clickedBlock.getBlock() == ModBlocks.ROOT_BLOCK.get() ||
 				clickedBlock.getFluidState().getFluid() == ModFluids.ROOT_FLUID.get();
 	}
+
+
 
 }

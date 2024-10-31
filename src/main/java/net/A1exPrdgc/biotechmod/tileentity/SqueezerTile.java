@@ -1,6 +1,5 @@
 package net.A1exPrdgc.biotechmod.tileentity;
 
-import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
@@ -11,18 +10,14 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.MinecartItem;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;

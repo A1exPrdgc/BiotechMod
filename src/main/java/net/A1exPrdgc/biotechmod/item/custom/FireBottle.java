@@ -36,9 +36,7 @@ public class FireBottle extends Item
 			PlayerEntity playerEntity =Objects.requireNonNull(context.getPlayer());
 			BlockState clickedBlock = world.getBlockState(context.getPos());
 
-			RightClickOnCertainBlockState(clickedBlock, context, playerEntity);
-			stack.damageItem(1, playerEntity, player -> player.sendBreakAnimation(context.getHand()));
-		}
+			RightClickOnCertainBlockState(clickedBlock, context, playerEntity);}
 
 
 		return super.onItemUseFirst(stack, context);
