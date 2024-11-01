@@ -37,18 +37,16 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 	public static final int COOKING_TIME = 5;
 	public static final int COOKING_TIME_TICK = COOKING_TIME * TICK_VALUE;
 	public static final int CAPACITY = 20_000;
+	public static final int MB_PER_ROOT = 250;
 
 	//-----------Obligatoire------------
 	private final ItemStackHandler itemHandler = createHandler();
-	private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 	private final FluidTank tank = createTank();
-
-	private boolean isActive = true;
 	private int timer = 0;
 	private IntArray data = new IntArray(3);
 
 	/*-----------------NBT---------------*/
-	private static final String NBTFLUID= "liq";
+	private static final String NBTFLUID= "FluidTank";
 	private static final  String NBTINV = "inv";
 
 
@@ -66,12 +64,12 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 	{
 		super.read(state, nbt);
 		itemHandler.deserializeNBT(nbt.getCompound(NBTINV));
-		tank.readFromNBT(nbt.getCompound("FluidTank"));
+		tank.readFromNBT(nbt.getCompound(NBTFLUID));
 	}
 	@Override
 	public CompoundNBT write(CompoundNBT compound){
 		compound.put(NBTINV, itemHandler.serializeNBT());
-		compound.put("FluidTank", this.tank.writeToNBT(new CompoundNBT()));
+		compound.put(NBTFLUID, this.tank.writeToNBT(new CompoundNBT()));
 		return super.write(compound);
 	}
 	/*-----------------------------------*/
@@ -170,21 +168,6 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 
 
 
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap){
-		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-		{
-			return LazyOptional.of(() -> itemHandler).cast();
-		}else if(cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-		{
-			return LazyOptional.of(() -> tank).cast();
-		}
-
-		return super.getCapability(cap);
-	}
-
-
 
 
 
@@ -200,7 +183,23 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 	public ItemStackHandler getItemHandler(){
 		return itemHandler;
 	}
+	@Override
+	public ITextComponent getDisplayName(){
+		return new TranslationTextComponent("Squeezer");
+	}
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap){
+		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+		{
+			return LazyOptional.of(() -> itemHandler).cast();
+		}else if(cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+		{
+			return LazyOptional.of(() -> tank).cast();
+		}
 
+		return super.getCapability(cap);
+	}
 	/*---------------------------------------*/
 
 
@@ -209,29 +208,28 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 
 
 
-
+	/*----------Recette----------*/
 	public boolean canCook()
 	{
 		return this.itemHandler.getStackInSlot(1).getCount() > 0 &&
-				this.itemHandler.getStackInSlot(1).getItem()  == ModItems.ROOT.get();
+				this.itemHandler.getStackInSlot(1).getItem()  == ModItems.ROOT.get() &&
+				this.data.get(1) <= SqueezerTile.CAPACITY;
 	}
-
 	public boolean canFill()
 	{
 		return  this.itemHandler.getStackInSlot(2).getCount() > 0 &&
 				this.itemHandler.getStackInSlot(2).getItem() == Items.BUCKET &&
-				this.data.get(1) >= FluidAttributes.BUCKET_VOLUME ;
+				this.data.get(1) >= FluidAttributes.BUCKET_VOLUME;
 	}
 
 	public void fillBucket()
 	{
-		if(this.canFill())
-		{
-			this.itemHandler.getStackInSlot(2).shrink(1);
-			this.itemHandler.insertItem(2, new ItemStack(ModItems.ROOT_BUCKET.get()), false);
-			this.tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
-		}
+		this.itemHandler.getStackInSlot(2).shrink(1);
+		this.itemHandler.insertItem(2, new ItemStack(ModItems.ROOT_BUCKET.get()), false);
+		this.tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+		this.data.set(1, this.tank.getFluidAmount());
 	}
+
 	public void liquid_root_creation()
 	{
 
@@ -244,16 +242,19 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 			this.tank.fill(new FluidStack(ModFluids.ROOT_FLUID.get(), 250), IFluidHandler.FluidAction.EXECUTE);
 
 			System.out.println(this.tank.getFluidInTank(1).getAmount());
+			this.data.set(2, this.timer);
+			this.data.set(1, this.tank.getFluidAmount());
 		}
 	}
+	/*---------------------------*/
 
 	@Override
 	public void tick(){
-		if (!world.isRemote() && this.isActive)
+		if (!world.isRemote())
 		{
 			this.data.set(0, this.itemHandler.getStackInSlot(1).getCount());
 
-			if(this.canCook() && this.data.get(1) + 250 <= SqueezerTile.CAPACITY)
+			if(this.canCook())
 			{
 				this.timer++;
 
@@ -264,25 +265,17 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 					this.timer = 0;
 
 					this.liquid_root_creation();
-					this.data.set(2, this.timer);
-					this.data.set(1, this.tank.getFluidAmount());
 				}
 			}
 
-			if( this.canFill() &&
-				this.data.get(1) >= FluidAttributes.BUCKET_VOLUME &&
-				this.itemHandler.getStackInSlot(2).getItem() == Items.BUCKET)
+			if( this.canFill())
 			{
 				this.fillBucket();
-				this.data.set(1, this.tank.getFluidAmount());
+
 			}
 		}
 	}
 
-	@Override
-	public ITextComponent getDisplayName(){
-		return new TranslationTextComponent("Squeezer");
-	}
 
 	@Nullable
 	@Override

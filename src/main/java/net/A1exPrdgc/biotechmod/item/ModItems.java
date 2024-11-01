@@ -14,6 +14,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.accessibility.AccessibleRelationSet;
+
 public class ModItems
 {
 	public static final DeferredRegister<Item> ITEMS =
@@ -41,7 +43,9 @@ public class ModItems
 	public static final RegistryObject<Item> ROOT_BUCKET = ITEMS.register("root_bucket",
 			() -> new BucketItem(() -> ModFluids.ROOT_FLUID.get(),
 					new Item.Properties().maxStackSize(1).group(ModItemGroup.BIOTECHMOD_GROUP)));
-
+	public static final RegistryObject<Item> RESIN_BUCKET = ITEMS.register("resin_bucket",
+			() -> new BucketItem(() -> ModFluids.RESIN_FLUID.get(),
+					new Item.Properties().maxStackSize(1).group(ModItemGroup.BIOTECHMOD_GROUP)));
 
 
 	public static void register(IEventBus eventBus)

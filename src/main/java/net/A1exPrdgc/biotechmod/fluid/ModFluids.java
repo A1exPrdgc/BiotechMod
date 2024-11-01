@@ -32,12 +32,27 @@ public class ModFluids {
 			= FLUIDS.register("root_flowing", () -> new ForgeFlowingFluid.Flowing(ModFluids.ROOT_PROPERTIES));
 	public static final ForgeFlowingFluid.Properties ROOT_PROPERTIES = new ForgeFlowingFluid.Properties(
 			() -> ROOT_FLUID.get(), () -> ROOT_FLOWING.get(), FluidAttributes.builder(WATER_STILL_RL, WATER_FLOWING_RL)
-			.density(50).luminosity(10).viscosity(5).sound(SoundEvents.ITEM_HONEY_BOTTLE_DRINK).overlay(WATER_OVERLAY_RL)
-			.color(0x00f621)).slopeFindDistance(4).levelDecreasePerBlock(3)
+			.density(50).luminosity(10).viscosity(5).sound(SoundEvents.ITEM_BUCKET_EMPTY).overlay(WATER_OVERLAY_RL)
+			.color(0x00f621)).slopeFindDistance(5).levelDecreasePerBlock(2)
 			.block(() -> ModFluids.LIQUID_ROOT_BLOCK.get()).bucket(() -> ModItems.ROOT_BUCKET.get());
 
 	public static final RegistryObject<FlowingFluidBlock> LIQUID_ROOT_BLOCK = ModBlocks.BLOCKS.register("root",
 			() -> new FlowingFluidBlock(() -> ModFluids.ROOT_FLUID.get(), AbstractBlock.Properties.create(Material.WATER)
+					.doesNotBlockMovement().hardnessAndResistance(100f).noDrops()));
+
+	public static final RegistryObject<FlowingFluid> RESIN_FLUID
+			= FLUIDS.register("resin_fluid", () -> new ForgeFlowingFluid.Source(ModFluids.RESIN_PROPERTIES));
+
+	public static final RegistryObject<FlowingFluid> RESIN_FLOWING
+			= FLUIDS.register("resin_flowing", () -> new ForgeFlowingFluid.Flowing(ModFluids.RESIN_PROPERTIES));
+	public static final ForgeFlowingFluid.Properties RESIN_PROPERTIES = new ForgeFlowingFluid.Properties(
+			() -> RESIN_FLUID.get(), () -> RESIN_FLOWING.get(), FluidAttributes.builder(WATER_STILL_RL, WATER_FLOWING_RL)
+			.density(100).luminosity(0).viscosity(50).sound(SoundEvents.BLOCK_HONEY_BLOCK_BREAK).overlay(WATER_OVERLAY_RL)
+			.color(0x634a04)).slopeFindDistance(0).levelDecreasePerBlock(5)
+			.block(() -> ModFluids.LIQUID_RESIN_BLOCK.get()).bucket(() -> ModItems.RESIN_BUCKET.get());
+
+	public static final RegistryObject<FlowingFluidBlock> LIQUID_RESIN_BLOCK = ModBlocks.BLOCKS.register("resin",
+			() -> new FlowingFluidBlock(() -> ModFluids.RESIN_FLUID.get(), AbstractBlock.Properties.create(Material.WATER)
 					.doesNotBlockMovement().hardnessAndResistance(100f).noDrops()));
 
 

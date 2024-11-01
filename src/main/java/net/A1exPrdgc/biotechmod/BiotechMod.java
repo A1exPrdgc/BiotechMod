@@ -8,6 +8,7 @@ import net.A1exPrdgc.biotechmod.energy.BioEnergizedFluxStorage;
 import net.A1exPrdgc.biotechmod.energy.IBioEnergizedFlux;
 import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
+import net.A1exPrdgc.biotechmod.screen.ExtractorScreen;
 import net.A1exPrdgc.biotechmod.screen.SqueezerScreen;
 import net.A1exPrdgc.biotechmod.tileentity.ModTileEntities;
 import net.A1exPrdgc.biotechmod.util.PacketHandler;
@@ -86,6 +87,7 @@ public class BiotechMod
             RenderTypeLookup.setRenderLayer(ModBlocks.SQUEEZER.get(), RenderType.getCutout());
 
             ScreenManager.registerFactory(ModContainers.SQUEEZER_CONTAINER.get(), SqueezerScreen::new);
+            ScreenManager.registerFactory(ModContainers.EXTRACTOR_CONTAINER.get(), ExtractorScreen::new);
 
             CapabilityManager.INSTANCE.register(IBioEnergizedFlux.class, new BioEnergizedFluxStorage(), BioEnergizedFlux::new);
         });

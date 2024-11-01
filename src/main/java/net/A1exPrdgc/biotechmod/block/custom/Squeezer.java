@@ -39,12 +39,11 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class Squeezer extends DirectionalBlock
-{
+public class Squeezer extends DirectionalBlock{
 
 	private SqueezerTile tileEntity;
-	public Squeezer(Properties properties)
-	{
+
+	public Squeezer(Properties properties){
 		super(properties);
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
 	}
@@ -61,38 +60,31 @@ public class Squeezer extends DirectionalBlock
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
-	{
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit){
 		//vérifie que le serveur répond
-		if(!worldIn.isRemote())
-		{
-			this.tileEntity = (SqueezerTile)worldIn.getTileEntity(pos);
+		if(!worldIn.isRemote()){
+			this.tileEntity=(SqueezerTile) worldIn.getTileEntity(pos);
 
-			//agit si le joueur est en sneak
-			if (tileEntity instanceof SqueezerTile)
-			{
-				//INamedContainerProvider containerProvider = createContainerProvider(worldIn, pos);
+			if(tileEntity instanceof SqueezerTile){
 				if(!(player.getHeldItemMainhand().getItem() == Items.BUCKET))
 				{
 					NetworkHooks.openGui(((ServerPlayerEntity) player), tileEntity, (PacketBuffer packetBuffer) -> {
 						packetBuffer.writeBlockPos(tileEntity.getPos());
 					});
-
-					System.out.println("azerty : " + tileEntity.getTank().getFluidAmount());
 				}
 				else
 				{
-					if (this.tileEntity.getTank().getFluidAmount() >= FluidAttributes.BUCKET_VOLUME)
+					if(this.tileEntity.getTank().getFluidAmount() >= FluidAttributes.BUCKET_VOLUME)
 					{
-						if (player.getHeldItemMainhand().getCount() == 1)
+						if(player.getHeldItemMainhand().getCount() == 1)
 						{
 							player.getHeldItemMainhand().getItem();
 							player.setHeldItem(Hand.MAIN_HAND, new ItemStack(ModItems.ROOT_BUCKET.get()));
 						}
 						else
 						{
-							player.setHeldItem(Hand.MAIN_HAND, new ItemStack( player.getHeldItemMainhand().getItem(),
-																		player.getHeldItemMainhand().getCount() - 1));
+							player.setHeldItem(Hand.MAIN_HAND, new ItemStack(player.getHeldItemMainhand().getItem(),
+									player.getHeldItemMainhand().getCount()-1));
 							player.inventory.addItemStackToInventory(new ItemStack(ModItems.ROOT_BUCKET.get()));
 						}
 						this.tileEntity.getTank().drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
@@ -108,22 +100,6 @@ public class Squeezer extends DirectionalBlock
 		return ActionResultType.SUCCESS;
 	}
 
-	/*private INamedContainerProvider createContainerProvider(World worldIn, BlockPos pos)
-	{
-		return new INamedContainerProvider() {
-			@Override
-			public ITextComponent getDisplayName() {
-				return new TranslationTextComponent("Squeezer");
-			}
-			@Nullable
-			@Override
-			public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-				System.out.println("whot 1");
-				return new SqueezerContainer(i, worldIn, pos, playerInventory, playerEntity, new IntArray(2));
-			}
-		};
-	}*/
-
 	@Nullable
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world){
@@ -134,8 +110,4 @@ public class Squeezer extends DirectionalBlock
 	public boolean hasTileEntity(BlockState state){
 		return true;
 	}
-
-
-
-
 }

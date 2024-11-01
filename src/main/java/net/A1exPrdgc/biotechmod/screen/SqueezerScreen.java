@@ -66,7 +66,7 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 		{
 			int temp = sizedBar(container.getDataArray().get(1));
 			this.blit(matrixStack, i + 122,j + 14 + (SqueezerScreen.TANK_SIZE_Y - temp), 177,
-					15 + (SqueezerScreen.TANK_SIZE_Y - temp), 18, temp);
+					15 + (SqueezerScreen.TANK_SIZE_Y - temp), SqueezerScreen.TANK_SIZE_X, temp);
 		}
 
 		//condition pour le lancement de la fabrication (animation flèche)

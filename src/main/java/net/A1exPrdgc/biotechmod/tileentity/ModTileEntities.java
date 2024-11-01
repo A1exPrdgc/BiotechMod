@@ -18,6 +18,11 @@ public class ModTileEntities
 					SqueezerTile::new, ModBlocks.SQUEEZER.get()).build(null)
 			);
 
+	public static RegistryObject<TileEntityType<ExtractorTile>> EXTRACTOR =
+			TILE_ENTITIES.register("extractor_tile", () -> TileEntityType.Builder.create(
+					ExtractorTile::new, ModBlocks.EXTRACTOR.get()).build(null)
+			);
+
 	public static void register(IEventBus eventbus)
 	{
 		TILE_ENTITIES.register(eventbus);

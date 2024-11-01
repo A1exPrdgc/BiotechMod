@@ -34,15 +34,18 @@ public class Syringe extends Item
 			PlayerEntity playerEntity =Objects.requireNonNull(context.getPlayer());
 			BlockState clickedBlock = world.getBlockState(context.getPos());
 
-			if(!stack.isDamaged() && !this.full)
+			if (this.blockIsValidForResistance(clickedBlock))
 			{
-				stack.setDamage(stack.getMaxDamage());
-			}
-			else
-			{
-				stack.setDamage(stack.getDamage() - 1);
-				if(stack.getDamage() == 0){
-					this.full = true;
+				if(!stack.isDamaged() && !this.full)
+				{
+					stack.setDamage(stack.getMaxDamage());
+				}
+				else
+				{
+					stack.setDamage(stack.getDamage() - 1);
+					if(stack.getDamage() == 0){
+						this.full = true;
+					}
 				}
 			}
 
