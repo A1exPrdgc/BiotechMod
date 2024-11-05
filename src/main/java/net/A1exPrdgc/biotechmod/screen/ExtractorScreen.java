@@ -5,10 +5,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.container.ExtractorContainer;
 import net.A1exPrdgc.biotechmod.tileentity.ExtractorTile;
+import net.A1exPrdgc.biotechmod.tileentity.SqueezerTile;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import java.awt.*;
 
@@ -47,6 +49,16 @@ public class ExtractorScreen extends ContainerScreen<ExtractorContainer>
 					1 + (ExtractorScreen.TANK_SIZE_Y - temp), TANK_SIZE_X, temp);
 		}
 
+	}
+
+	@Override
+	protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y){
+		super.renderHoveredTooltip(matrixStack, x, y);
+
+		int temp = sizedBar(container.getDataArray().get(0));
+		if(x >= guiLeft + 79 && x < guiLeft + 79 + ExtractorScreen.TANK_SIZE_X && y >= guiTop + 9 + (ExtractorScreen.TANK_SIZE_Y - temp) && y < guiTop + 9 + ExtractorScreen.TANK_SIZE_Y){
+			this.renderTooltip(matrixStack, new StringTextComponent(container.getDataArray().get(0) + "/" + ExtractorTile.CAPACITY), x, y);
+		}
 	}
 
 	private static int sizedBar(int value)

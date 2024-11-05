@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import java.awt.*;
 
@@ -72,6 +73,15 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 		//condition pour le lancement de la fabrication (animation flèche)
 	}
 
+	@Override
+	protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y){
+		super.renderHoveredTooltip(matrixStack, x, y);
+
+		int temp = sizedBar(container.getDataArray().get(1));
+		if(x >= guiLeft + 122 && x < guiLeft + 122 + SqueezerScreen.TANK_SIZE_X && y >= guiTop + 14 + (SqueezerScreen.TANK_SIZE_Y - temp) && y < guiTop + 14 + TANK_SIZE_Y){
+			this.renderTooltip(matrixStack, new StringTextComponent(container.getDataArray().get(1) + "/" + SqueezerTile.CAPACITY), x, y);
+		}
+	}
 	/*@Override
 	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y){
 		this.drawString(matrixStack, this.font, container.getDataArray().get(0) + " : " + container.getDataArray().get(1), 10, 84, 65);
