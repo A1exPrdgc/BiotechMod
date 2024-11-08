@@ -85,6 +85,7 @@ public class BiotechMod
         event.enqueueWork(() -> {
             RenderTypeLookup.setRenderLayer(ModBlocks.EXTRACTOR.get(), RenderType.getCutout());
             RenderTypeLookup.setRenderLayer(ModBlocks.SQUEEZER.get(), RenderType.getCutout());
+            RenderTypeLookup.setRenderLayer(ModBlocks.REFINERY.get(), RenderType.getCutout());
 
             ScreenManager.registerFactory(ModContainers.SQUEEZER_CONTAINER.get(), SqueezerScreen::new);
             ScreenManager.registerFactory(ModContainers.EXTRACTOR_CONTAINER.get(), ExtractorScreen::new);

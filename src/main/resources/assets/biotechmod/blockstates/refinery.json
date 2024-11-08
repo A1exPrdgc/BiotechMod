@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "biotechmod:block/refinery",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "biotechmod:block/refinery",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "biotechmod:block/refinery"
+    },
+    "facing=west": {
+      "model": "biotechmod:block/refinery",
+      "y": 90
+    }
+  }
+}

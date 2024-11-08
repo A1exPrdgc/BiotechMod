@@ -2,6 +2,7 @@ package net.A1exPrdgc.biotechmod.block;
 
 import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.block.custom.Extractor;
+import net.A1exPrdgc.biotechmod.block.custom.Refinery;
 import net.A1exPrdgc.biotechmod.block.custom.Squeezer;
 import net.A1exPrdgc.biotechmod.item.ModItemGroup;
 import net.A1exPrdgc.biotechmod.item.ModItems;
@@ -23,8 +24,6 @@ import java.util.function.Supplier;
 public class ModBlocks
 {
 
-
-
 	public static final DeferredRegister<Block> BLOCKS
 			= DeferredRegister.create(ForgeRegistries.BLOCKS, BiotechMod.MOD_ID);
 
@@ -35,6 +34,10 @@ public class ModBlocks
 	public static final RegistryObject<Block> ASH_BLOCK = registerBlock("ash_block",
 			() -> new Block(AbstractBlock.Properties.create(Material.SAND)
 					.harvestLevel(0).harvestTool(ToolType.SHOVEL).hardnessAndResistance(0.5F).sound(SoundType.SAND)));
+
+	public static final RegistryObject<Block> REFINERY = registerBlock("refinery",
+			() -> new Refinery(AbstractBlock.Properties.create(Material.IRON)
+					.harvestLevel(0).notSolid().hardnessAndResistance(0.4F).harvestTool(ToolType.PICKAXE).sound(SoundType.STONE)));
 
 	public static final RegistryObject<Block> EXTRACTOR = registerBlock("extractor",
 			() -> new Extractor(AbstractBlock.Properties.create(Material.IRON)
