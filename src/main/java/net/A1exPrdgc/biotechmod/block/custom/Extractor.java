@@ -94,17 +94,6 @@ public class Extractor extends DirectionalBlock {
 		return bloc;
 	}
 
-	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving){
-		Direction dir = state.get(FACING);
-		BlockPos blocPos = pos.offset(dir.getOpposite());
-		Block bloc = worldIn.getBlockState(blocPos).getBlock();
-		if(bloc == Blocks.OAK_LOG && worldIn.isBlockPowered(pos))
-		{
-			System.out.println("dfghjklm");
-		}
-	}
-
 	@Nullable
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world){

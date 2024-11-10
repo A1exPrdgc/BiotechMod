@@ -1,9 +1,8 @@
 package net.A1exPrdgc.biotechmod.tileentity;
 
-import net.A1exPrdgc.biotechmod.BiotechMod;
+import net.A1exPrdgc.biotechmod.base.IFluidMachinery;
 import net.A1exPrdgc.biotechmod.block.custom.Extractor;
 import net.A1exPrdgc.biotechmod.container.ExtractorContainer;
-import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.minecraft.block.BlockState;
@@ -34,7 +33,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ExtractorTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider
+public class ExtractorTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IFluidMachinery
 {
 
 	/*----------NBT----------*/

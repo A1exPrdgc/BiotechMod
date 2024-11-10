@@ -1,5 +1,6 @@
 package net.A1exPrdgc.biotechmod.tileentity;
 
+import net.A1exPrdgc.biotechmod.base.IFluidMachinery;
 import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
@@ -30,7 +31,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SqueezerTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider
+public class SqueezerTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IFluidMachinery
 {
 	//-----------Constants--------------
 	public static final int TICK_VALUE = 20;
