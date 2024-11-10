@@ -46,6 +46,10 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 	private int timer = 0;
 	private IntArray data = new IntArray(3);
 
+	private final LazyOptional<FluidTank> fluidTankOptional = LazyOptional.of(() -> tank);
+
+
+
 	/*-----------------NBT---------------*/
 	private static final String NBTFLUID= "FluidTank";
 	private static final  String NBTINV = "inv";
@@ -69,9 +73,10 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 	}
 	@Override
 	public CompoundNBT write(CompoundNBT compound){
+		super.write(compound);
 		compound.put(NBTINV, itemHandler.serializeNBT());
 		compound.put(NBTFLUID, this.tank.writeToNBT(new CompoundNBT()));
-		return super.write(compound);
+		return compound;
 	}
 	/*-----------------------------------*/
 
@@ -194,7 +199,8 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 		{
 			return LazyOptional.of(() -> itemHandler).cast();
-		}else if(cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+		}
+		if(cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 		{
 			return LazyOptional.of(() -> tank).cast();
 		}

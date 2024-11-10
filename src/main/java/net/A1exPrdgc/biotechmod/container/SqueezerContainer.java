@@ -34,6 +34,7 @@ public class SqueezerContainer extends Container
 	private SqueezerTile tileEntity;
 	private final PlayerEntity playerEntity;
 	private final IItemHandler playerInventory;
+	private IFluidHandler fluidHandler;
 	private IntArray data;
 
 	public SqueezerContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player)
@@ -55,6 +56,11 @@ public class SqueezerContainer extends Container
 		this.setData(0, this.tileEntity.getItemHandler().getStackInSlot(1).getCount()); // nombre d'item dans le slot 1
 		this.setData(1, this.tileEntity.getTank().getFluidAmount());                    // quantité de fluid ans le tank
 		this.setData(2, this.tileEntity.getTimer());                                    // timer
+
+		this.fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).orElseThrow(
+				() -> new IllegalStateException("FluidHandler capability not present")
+		);
+
 
 
 		//System.out.println(tileEntity.getWorld() != null && !tileEntity.getWorld().isRemote ? "Container côté serveur : " + this.data.get(1) : "Container côté client : " + this.data.get(1));
@@ -89,6 +95,10 @@ public class SqueezerContainer extends Container
 		return data;
 	}
 
+	public IFluidHandler getFluidHandler(){
+		return fluidHandler;
+	}
+
 	public void setData(int index, int value){
 		this.data.set(index, value);
 	}
@@ -97,6 +107,10 @@ public class SqueezerContainer extends Container
 	public boolean canInteractWith(PlayerEntity playerIn){
 		return isWithinUsableDistance(IWorldPosCallable.of(
 				tileEntity.getWorld(), tileEntity.getPos()), playerIn, ModBlocks.SQUEEZER.get());
+	}
+
+	public SqueezerTile getTileEntity(){
+		return tileEntity;
 	}
 
 	@Override

@@ -28,8 +28,6 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 	private final ResourceLocation GUI = new ResourceLocation(BiotechMod.MOD_ID,
 			"textures/gui/squeezer_gui.png");
 
-	private Rectangle fluidBar = new Rectangle(122, 14, 18, 47);
-
 	public SqueezerScreen(SqueezerContainer screenContainer, PlayerInventory inv, ITextComponent titleIn){
 		super(screenContainer, inv, titleIn);
 	}
@@ -52,6 +50,8 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 		int i = this.guiLeft;
 		int j = this.guiTop;
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+
+		System.out.println(container.getFluidHandler().getFluidInTank(0).getFluid());
 
 		//gère la flèche
 		if (container.getDataArray().get(2) >= 0 &&
@@ -82,10 +82,6 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 			this.renderTooltip(matrixStack, new StringTextComponent(container.getDataArray().get(1) + "/" + SqueezerTile.CAPACITY), x, y);
 		}
 	}
-	/*@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y){
-		this.drawString(matrixStack, this.font, container.getDataArray().get(0) + " : " + container.getDataArray().get(1), 10, 84, 65);
-	}*/
 
 	private static int sizedBar(int value)
 	{
