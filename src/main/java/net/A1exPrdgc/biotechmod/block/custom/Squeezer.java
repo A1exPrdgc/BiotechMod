@@ -16,6 +16,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketBuffer;
@@ -34,6 +35,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -62,10 +64,12 @@ public class Squeezer extends DirectionalBlock{
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit){
 		//vérifie que le serveur répond
-		if(!worldIn.isRemote()){
+		if(!worldIn.isRemote())
+		{
 			this.tileEntity=(SqueezerTile) worldIn.getTileEntity(pos);
 
-			if(tileEntity instanceof SqueezerTile){
+			if(tileEntity instanceof SqueezerTile)
+			{
 				if(!(player.getHeldItemMainhand().getItem() == Items.BUCKET))
 				{
 					NetworkHooks.openGui(((ServerPlayerEntity) player), tileEntity, (PacketBuffer packetBuffer) -> {

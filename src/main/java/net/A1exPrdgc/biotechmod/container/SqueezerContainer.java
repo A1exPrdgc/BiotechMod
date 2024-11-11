@@ -4,18 +4,15 @@ import net.A1exPrdgc.biotechmod.block.ModBlocks;
 import net.A1exPrdgc.biotechmod.tileentity.SqueezerTile;
 import net.A1exPrdgc.biotechmod.util.PacketHandler;
 import net.A1exPrdgc.biotechmod.util.UpdateContainerDataPacket;
-import net.minecraft.command.arguments.SlotArgument;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -27,44 +24,19 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-import javax.annotation.Nullable;
-
 public class SqueezerContainer extends Container
 {
 	private SqueezerTile tileEntity;
 	private final PlayerEntity playerEntity;
 	private final IItemHandler playerInventory;
-	private IFluidHandler fluidHandler;
-	private IntArray data;
-
 	public SqueezerContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player)
-	{
-		this(windowId, world, pos, playerInventory, player, new IntArray(3));
-	}
-
-	public SqueezerContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player, IntArray data)
 	{
 		super(ModContainers.SQUEEZER_CONTAINER.get(), windowId);
 
-		this.data = data;
-		trackIntArray(this.data);
 
 		this.tileEntity = (SqueezerTile)world.getTileEntity(pos);
 		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(playerInventory);
-
-		this.setData(0, this.tileEntity.getItemHandler().getStackInSlot(1).getCount()); // nombre d'item dans le slot 1
-		this.setData(1, this.tileEntity.getTank().getFluidAmount());                    // quantité de fluid ans le tank
-		this.setData(2, this.tileEntity.getTimer());                                    // timer
-
-		this.fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).orElseThrow(
-				() -> new IllegalStateException("FluidHandler capability not present")
-		);
-
-
-
-		//System.out.println(tileEntity.getWorld() != null && !tileEntity.getWorld().isRemote ? "Container côté serveur : " + this.data.get(1) : "Container côté client : " + this.data.get(1));
-
 
 		layoutPlayerInventorySlots(8, 86);
 
@@ -91,16 +63,14 @@ public class SqueezerContainer extends Container
 		}
 	}
 
-	public IntArray getDataArray(){
-		return data;
-	}
+	public ResourceLocation getFluidTexture() {
+		FluidStack fluidStack = this.tileEntity.getTank().getFluid();
 
-	public IFluidHandler getFluidHandler(){
-		return fluidHandler;
-	}
+		if (!fluidStack.isEmpty()) {
+			return fluidStack.getFluid().getAttributes().getStillTexture();
+		}
 
-	public void setData(int index, int value){
-		this.data.set(index, value);
+		return null;
 	}
 
 	@Override
@@ -111,30 +81,6 @@ public class SqueezerContainer extends Container
 
 	public SqueezerTile getTileEntity(){
 		return tileEntity;
-	}
-
-	@Override
-	public void updateProgressBar(int id, int data){
-		super.updateProgressBar(id, data);
-		this.detectAndSendChanges();
-	}
-
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-
-		for (int i = 0; i < 2; i++) {
-			int currentValue = data.get(i);
-
-			// Envoyer la mise à jour au client via un paquet personnalisé
-			if (!this.playerEntity.world.isRemote())
-			{
-				PacketHandler.INSTANCE.send(
-						PacketDistributor.PLAYER.with(() -> ((ServerPlayerEntity) playerEntity)),
-						new UpdateContainerDataPacket(this.windowId, i, currentValue)
-				);
-			}
-		}
 	}
 
 	//--------------------Gestion de l'inventaire----------------------
@@ -163,14 +109,6 @@ public class SqueezerContainer extends Container
 		topRow += 58;
 		addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
 	}
-
-
-
-	/*@Override
-	public String toString(){
-		return  "qa : " + this.tileEntity.getFluidInTank(1).getAmount() + "\n" +
-				"fl : " + this.tileEntity.getFluidInTank(1).getFluid()  + "\n";
-	}*/
 
 	//----------------------------------------------------
 

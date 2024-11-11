@@ -1,5 +1,6 @@
 package net.A1exPrdgc.biotechmod.util;
 
+import net.A1exPrdgc.biotechmod.container.ExtractorContainer;
 import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.container.Container;
@@ -37,8 +38,8 @@ public class UpdateContainerDataPacket {
 			Container container = Minecraft.getInstance().player.openContainer;
 
 			// Vérification du type de conteneur et mise à jour des données
-			if (container.windowId == packet.windowId && container instanceof SqueezerContainer) {
-				((SqueezerContainer) container).setData(packet.index, packet.value);
+			if (container.windowId == packet.windowId && container instanceof ExtractorContainer) {
+				((ExtractorContainer) container).setData(packet.index, packet.value);
 			}
 		});
 		context.get().setPacketHandled(true);

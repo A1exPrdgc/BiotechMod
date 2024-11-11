@@ -56,7 +56,7 @@ public class BiotechMod
         ModContainers.register(eventBus);
         ModFluids.register(eventBus);
 
-        PacketHandler.register();
+        //PacketHandler.register();
 
 
         eventBus.addListener(this::setup);

@@ -25,6 +25,10 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 	public static final int TANK_SIZE_X = 18;
 	public static final int TANK_SIZE_Y = 47;
 
+	private int fluidAmount;
+	private int timer;
+	private int nbItemInMainSlot;
+
 	private final ResourceLocation GUI = new ResourceLocation(BiotechMod.MOD_ID,
 			"textures/gui/squeezer_gui.png");
 
@@ -34,7 +38,6 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 
 	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks){
-
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
@@ -51,35 +54,34 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 		int j = this.guiTop;
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
 
-		System.out.println(container.getFluidHandler().getFluidInTank(0).getFluid());
+		this.nbItemInMainSlot = container.getTileEntity().getCount();                                       // nombre d'item dans le slot 1
+		this.fluidAmount = container.getTileEntity().getTank().getFluidAmount();                            // quantité de fluid ans le tank
+		this.timer = container.getTileEntity().getTimer();                                                  // timer
 
 		//gère la flèche
-		if (container.getDataArray().get(2) >= 0 &&
-			container.getDataArray().get(0) > 1 &&
-			container.getDataArray().get(1) + 250 <= SqueezerTile.CAPACITY)
+		if (this.timer >= 0 && this.nbItemInMainSlot > 1 && this.fluidAmount <= SqueezerTile.CAPACITY)
 		{
 			this.blit(matrixStack, i + 63, j + 32, 176, 0,
-					  sizedArrow(container.getDataArray().get(2)), SqueezerScreen.ARROW_SIZE_Y);
+					  sizedArrow(this.timer), SqueezerScreen.ARROW_SIZE_Y);
 		}
 
 		//gère le tank
-		if (container.getDataArray().get(1) > 0)
+		if (this.fluidAmount > 0)
 		{
-			int temp = sizedBar(container.getDataArray().get(1));
+			int temp = sizedBar(this.fluidAmount);
 			this.blit(matrixStack, i + 122,j + 14 + (SqueezerScreen.TANK_SIZE_Y - temp), 177,
 					15 + (SqueezerScreen.TANK_SIZE_Y - temp), SqueezerScreen.TANK_SIZE_X, temp);
 		}
-
-		//condition pour le lancement de la fabrication (animation flèche)
 	}
 
 	@Override
 	protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y){
 		super.renderHoveredTooltip(matrixStack, x, y);
+		int qa = container.getTileEntity().getTank().getFluidAmount();
 
-		int temp = sizedBar(container.getDataArray().get(1));
+		int temp = sizedBar(qa);
 		if(x >= guiLeft + 122 && x < guiLeft + 122 + SqueezerScreen.TANK_SIZE_X && y >= guiTop + 14 + (SqueezerScreen.TANK_SIZE_Y - temp) && y < guiTop + 14 + TANK_SIZE_Y){
-			this.renderTooltip(matrixStack, new StringTextComponent(container.getDataArray().get(1) + "/" + SqueezerTile.CAPACITY), x, y);
+			this.renderTooltip(matrixStack, new StringTextComponent(this.fluidAmount + "/" + SqueezerTile.CAPACITY), x, y);
 		}
 	}
 
