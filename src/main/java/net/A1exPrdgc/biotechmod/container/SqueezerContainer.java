@@ -73,6 +73,17 @@ public class SqueezerContainer extends Container
 		return null;
 	}
 
+	public int getFluidColor()
+	{
+		FluidStack fluidstack = this.tileEntity.getTank().getFluid();
+
+		if(!fluidstack.isEmpty())
+		{
+			return fluidstack.getFluid().getAttributes().getColor();
+		}
+		return 0;
+	}
+
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn){
 		return isWithinUsableDistance(IWorldPosCallable.of(

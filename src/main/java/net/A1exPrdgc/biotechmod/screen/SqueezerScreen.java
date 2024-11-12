@@ -2,20 +2,26 @@ package net.A1exPrdgc.biotechmod.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.sun.scenario.effect.Color4f;
 import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.tileentity.SqueezerTile;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.awt.*;
+
+import static net.minecraftforge.fml.client.gui.GuiUtils.drawTexturedModalRect;
 
 public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 {
@@ -54,6 +60,7 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 		int j = this.guiTop;
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
 
+
 		this.nbItemInMainSlot = container.getTileEntity().getCount();                                       // nombre d'item dans le slot 1
 		this.fluidAmount = container.getTileEntity().getTank().getFluidAmount();                            // quantité de fluid ans le tank
 		this.timer = container.getTileEntity().getTimer();                                                  // timer
@@ -69,9 +76,30 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 		if (this.fluidAmount > 0)
 		{
 			int temp = sizedBar(this.fluidAmount);
-			this.blit(matrixStack, i + 122,j + 14 + (SqueezerScreen.TANK_SIZE_Y - temp), 177,
-					15 + (SqueezerScreen.TANK_SIZE_Y - temp), SqueezerScreen.TANK_SIZE_X, temp);
+			TextureAtlasSprite fluidTexture = Minecraft.getInstance().getModelManager().getAtlasTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).getSprite(container.getFluidTexture());
+
+			float[] tabcol = SqueezerScreen.intToColor4f(container.getFluidColor());
+
+			Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+			RenderSystem.color4f( tabcol[0],  tabcol[1],  tabcol[2],  tabcol[3]);
+
+			blit(matrixStack, i + 122,j + 14 + (SqueezerScreen.TANK_SIZE_Y - temp),0 , SqueezerScreen.TANK_SIZE_X, temp, fluidTexture);
+
 		}
+	}
+
+	private static float[] intToColor4f(int c)
+	{
+		float[] res = new float[4];
+		Color col = new Color(c);
+
+		res[0] = (float) col.getRed() / 100;
+		res[1] = (float) col.getGreen() / 100;
+		res[2] = (float) col.getBlue() / 100;
+		res[3] = col.getAlpha();
+
+		return res;
+
 	}
 
 	@Override
