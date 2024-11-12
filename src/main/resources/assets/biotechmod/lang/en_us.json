@@ -8,7 +8,7 @@
   "item.biotechmod.syringe" : "Root syringe",
   "block.biotechmod.root_block" : "Root block",
   "block.biotechmod.ash_block" : "Ash block",
-  "block.biotechmod.extractor" : "Extractor de fluide blanc non identifier de papa",
+  "block.biotechmod.extractor" : "Extractor",
   "block.biotechmod.squeezer" : "Squeezer",
   "block.biotechmod.refinery" : "Refinery",
   "itemGroup.biotechModTab" : "Biotech Mod"

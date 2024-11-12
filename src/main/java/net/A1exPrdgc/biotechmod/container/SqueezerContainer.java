@@ -2,23 +2,17 @@ package net.A1exPrdgc.biotechmod.container;
 
 import net.A1exPrdgc.biotechmod.block.ModBlocks;
 import net.A1exPrdgc.biotechmod.tileentity.SqueezerTile;
-import net.A1exPrdgc.biotechmod.util.PacketHandler;
-import net.A1exPrdgc.biotechmod.util.UpdateContainerDataPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntArray;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -61,27 +55,7 @@ public class SqueezerContainer extends Container
 
 			});
 		}
-	}
-
-	public ResourceLocation getFluidTexture() {
-		FluidStack fluidStack = this.tileEntity.getTank().getFluid();
-
-		if (!fluidStack.isEmpty()) {
-			return fluidStack.getFluid().getAttributes().getStillTexture();
-		}
-
-		return null;
-	}
-
-	public int getFluidColor()
-	{
-		FluidStack fluidstack = this.tileEntity.getTank().getFluid();
-
-		if(!fluidstack.isEmpty())
-		{
-			return fluidstack.getFluid().getAttributes().getColor();
-		}
-		return 0;
+		this.tileEntity.onTankChanged();
 	}
 
 	@Override

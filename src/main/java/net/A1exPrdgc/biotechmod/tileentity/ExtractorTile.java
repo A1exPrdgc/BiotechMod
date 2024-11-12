@@ -1,8 +1,10 @@
 package net.A1exPrdgc.biotechmod.tileentity;
 
 import net.A1exPrdgc.biotechmod.base.IFluidMachinery;
+import net.A1exPrdgc.biotechmod.base.IMachinery;
 import net.A1exPrdgc.biotechmod.block.custom.Extractor;
 import net.A1exPrdgc.biotechmod.container.ExtractorContainer;
+import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.minecraft.block.BlockState;
@@ -15,6 +17,8 @@ import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IntArray;
@@ -45,8 +49,9 @@ public class ExtractorTile extends TileEntity implements ITickableTileEntity, IN
 	public static final int EXTRACT_TIME_IN_SEC = 1;
 	public static final int EXTRACT_TIME_IN_TICK = TICK_VALUE * EXTRACT_TIME_IN_SEC;
 
+	private int fluidAmount;
+
 	/*----------InstanceVar----------*/
-	private IntArray data = new IntArray(1);
 	private FluidTank tank = createTank();
 	private int timer = 0;
 	private final ItemStackHandler itemHandler = createHandler();
@@ -68,6 +73,25 @@ public class ExtractorTile extends TileEntity implements ITickableTileEntity, IN
 		compound.put(NBTINV, itemHandler.serializeNBT());
 		compound.put(NBTFLUID, this.tank.writeToNBT(new CompoundNBT()));
 		return super.write(compound);
+	}
+
+	@Nullable
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket(){
+		CompoundNBT nbt = new CompoundNBT();
+		this.write(nbt);
+		return new SUpdateTileEntityPacket(this.getPos(), 1, nbt);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt){
+		this.read(null, pkt.getNbtCompound());
+	}
+
+	public void onTankChanged() {
+		if (!this.world.isRemote) {  // Vérifiez que ce code est exécuté côté serveur
+			this.world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 3);
+		}
 	}
 
 	private ItemStackHandler createHandler()
@@ -178,14 +202,14 @@ public class ExtractorTile extends TileEntity implements ITickableTileEntity, IN
 
 	public FluidTank getTank()
 	{
-		return tank;
+		return this.tank;
 	}
 
 	public boolean canExtract()
 	{
 		Extractor temp = ((Extractor)world.getBlockState(pos).getBlock());
 		return  temp.getNeighborFacing(world, pos) == Blocks.OAK_LOG &&
-				this.data.get(0) < ExtractorTile.CAPACITY;
+				this.fluidAmount < ExtractorTile.CAPACITY;
 	}
 
 	public boolean canFill()
@@ -199,7 +223,7 @@ public class ExtractorTile extends TileEntity implements ITickableTileEntity, IN
 		this.itemHandler.getStackInSlot(0).shrink(1);
 		this.itemHandler.insertItem(0, new ItemStack(ModItems.RESIN_BUCKET.get()), false);
 		this.tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
-		this.data.set(0, this.tank.getFluidAmount());
+		this.fluidAmount = this.tank.getFluidAmount();
 	}
 
 	@Override
@@ -217,14 +241,15 @@ public class ExtractorTile extends TileEntity implements ITickableTileEntity, IN
 				{
 					this.timer = 0;
 					this.tank.fill(new FluidStack(ModFluids.RESIN_FLUID.get(), ExtractorTile.QUANTITY_EXTRACT_PER_TICK), IFluidHandler.FluidAction.EXECUTE);
-					this.data.set(0, this.tank.getFluidAmount());
-					System.out.println(this.data.get(0));
+					this.fluidAmount = this.tank.getFluidAmount();
+					this.onTankChanged();
 				}
 			}
 
 			if(this.canFill())
 			{
 				fillBucket();
+				this.onTankChanged();
 			}
 		}
 
@@ -234,6 +259,6 @@ public class ExtractorTile extends TileEntity implements ITickableTileEntity, IN
 	@Override
 	public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity)
 	{
-		return new ExtractorContainer(i, this.world, this.pos, playerInventory, playerEntity, data);
+		return new ExtractorContainer(i, this.world, this.pos, playerInventory, playerEntity);
 	}
 }

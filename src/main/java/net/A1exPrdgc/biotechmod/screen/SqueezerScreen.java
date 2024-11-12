@@ -6,6 +6,7 @@ import com.sun.scenario.effect.Color4f;
 import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.tileentity.SqueezerTile;
+import net.A1exPrdgc.biotechmod.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -18,6 +19,7 @@ import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.*;
 
@@ -60,6 +62,8 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 		int j = this.guiTop;
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
 
+		FluidStack fluid = container.getTileEntity().getTank().getFluid();
+
 
 		this.nbItemInMainSlot = container.getTileEntity().getCount();                                       // nombre d'item dans le slot 1
 		this.fluidAmount = container.getTileEntity().getTank().getFluidAmount();                            // quantité de fluid ans le tank
@@ -76,9 +80,9 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 		if (this.fluidAmount > 0)
 		{
 			int temp = sizedBar(this.fluidAmount);
-			TextureAtlasSprite fluidTexture = Minecraft.getInstance().getModelManager().getAtlasTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).getSprite(container.getFluidTexture());
+			TextureAtlasSprite fluidTexture = Minecraft.getInstance().getModelManager().getAtlasTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).getSprite(Util.getFluidTexture(fluid));
 
-			float[] tabcol = SqueezerScreen.intToColor4f(container.getFluidColor());
+			float[] tabcol = Util.intToColor4f(Util.getFluidColor(fluid));
 
 			Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 			RenderSystem.color4f( tabcol[0],  tabcol[1],  tabcol[2],  tabcol[3]);
@@ -86,20 +90,6 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 			blit(matrixStack, i + 122,j + 14 + (SqueezerScreen.TANK_SIZE_Y - temp),0 , SqueezerScreen.TANK_SIZE_X, temp, fluidTexture);
 
 		}
-	}
-
-	private static float[] intToColor4f(int c)
-	{
-		float[] res = new float[4];
-		Color col = new Color(c);
-
-		res[0] = (float) col.getRed() / 100;
-		res[1] = (float) col.getGreen() / 100;
-		res[2] = (float) col.getBlue() / 100;
-		res[3] = col.getAlpha();
-
-		return res;
-
 	}
 
 	@Override

@@ -1,3 +1,3 @@
 package net.A1exPrdgc.biotechmod.base;
 
-public interface IItemMachinery{}
+public interface IItemMachinery extends IMachinery{}

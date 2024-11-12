@@ -5,14 +5,17 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.container.ExtractorContainer;
 import net.A1exPrdgc.biotechmod.tileentity.ExtractorTile;
-import net.A1exPrdgc.biotechmod.tileentity.SqueezerTile;
+import net.A1exPrdgc.biotechmod.util.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-
-import java.awt.*;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class ExtractorScreen extends ContainerScreen<ExtractorContainer>
 {
@@ -21,7 +24,7 @@ public class ExtractorScreen extends ContainerScreen<ExtractorContainer>
 	private final ResourceLocation GUI = new ResourceLocation(BiotechMod.MOD_ID,
 			"textures/gui/extractor_gui.png");
 
-	private Rectangle fluidBar = new Rectangle(122, 14, 18, 47);
+	private int fluidAmount;
 
 	public ExtractorScreen(ExtractorContainer screenContainer, PlayerInventory inv, ITextComponent titleIn){
 		super(screenContainer, inv, titleIn);
@@ -42,11 +45,22 @@ public class ExtractorScreen extends ContainerScreen<ExtractorContainer>
 		int j = this.guiTop;
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
 
-		if(container.getDataArray().get(0) > 0)
+		FluidTank tank = container.getTileEntity().getTank();
+		FluidStack fluid = tank.getFluid();
+
+		this.fluidAmount = tank.getFluidAmount();
+
+		if(this.fluidAmount > 0)
 		{
-			int temp = sizedBar(container.getDataArray().get(0));
-			this.blit(matrixStack, i + 79,j + 9 + (ExtractorScreen.TANK_SIZE_Y - temp), 177,
-					1 + (ExtractorScreen.TANK_SIZE_Y - temp), TANK_SIZE_X, temp);
+			System.out.println(this.fluidAmount);
+			int temp = sizedBar(this.fluidAmount);
+			TextureAtlasSprite fluidTexture = Minecraft.getInstance().getModelManager().getAtlasTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).getSprite(Util.getFluidTexture(fluid));
+
+			float[] tabcol = Util.intToColor4f(Util.getFluidColor(fluid));
+
+			Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+			RenderSystem.color4f( tabcol[0],  tabcol[1],  tabcol[2],  tabcol[3]);
+			blit(matrixStack, i + 79,j + 9 + (ExtractorScreen.TANK_SIZE_Y - temp),0 , TANK_SIZE_X, temp, fluidTexture);
 		}
 
 	}
@@ -55,9 +69,9 @@ public class ExtractorScreen extends ContainerScreen<ExtractorContainer>
 	protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y){
 		super.renderHoveredTooltip(matrixStack, x, y);
 
-		int temp = sizedBar(container.getDataArray().get(0));
+		int temp = sizedBar(this.fluidAmount);
 		if(x >= guiLeft + 79 && x < guiLeft + 79 + ExtractorScreen.TANK_SIZE_X && y >= guiTop + 9 + (ExtractorScreen.TANK_SIZE_Y - temp) && y < guiTop + 9 + ExtractorScreen.TANK_SIZE_Y){
-			this.renderTooltip(matrixStack, new StringTextComponent(container.getDataArray().get(0) + "/" + ExtractorTile.CAPACITY), x, y);
+			this.renderTooltip(matrixStack, new StringTextComponent(this.fluidAmount + "/" + ExtractorTile.CAPACITY), x, y);
 		}
 	}
 
