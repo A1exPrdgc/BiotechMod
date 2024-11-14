@@ -1,10 +1,8 @@
 package net.A1exPrdgc.biotechmod.tileentity;
 
 import net.A1exPrdgc.biotechmod.base.IFluidMachinery;
-import net.A1exPrdgc.biotechmod.base.IMachinery;
 import net.A1exPrdgc.biotechmod.block.custom.Extractor;
 import net.A1exPrdgc.biotechmod.container.ExtractorContainer;
-import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.fluid.ModFluids;
 import net.A1exPrdgc.biotechmod.item.ModItems;
 import net.minecraft.block.BlockState;
@@ -21,7 +19,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -235,7 +232,6 @@ public class ExtractorTile extends TileEntity implements ITickableTileEntity, IN
 			if(this.canExtract())
 			{
 				this.timer ++;
-				System.out.println(this.timer);
 
 				if(this.timer >= EXTRACT_TIME_IN_TICK)
 				{

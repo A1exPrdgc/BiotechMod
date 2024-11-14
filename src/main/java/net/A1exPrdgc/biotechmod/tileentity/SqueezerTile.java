@@ -331,7 +331,6 @@ public class SqueezerTile extends TileEntity implements ITickableTileEntity, INa
 	@Nullable
 	@Override
 	public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity){
-		System.out.println("whot 1");
 		return new SqueezerContainer(i, this.world, this.pos, playerInventory, playerEntity);
 	}
 

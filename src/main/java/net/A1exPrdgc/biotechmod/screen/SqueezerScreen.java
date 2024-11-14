@@ -2,28 +2,19 @@ package net.A1exPrdgc.biotechmod.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.sun.scenario.effect.Color4f;
 import net.A1exPrdgc.biotechmod.BiotechMod;
 import net.A1exPrdgc.biotechmod.container.SqueezerContainer;
 import net.A1exPrdgc.biotechmod.tileentity.SqueezerTile;
 import net.A1exPrdgc.biotechmod.util.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.awt.*;
-
-import static net.minecraftforge.fml.client.gui.GuiUtils.drawTexturedModalRect;
 
 public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 {
@@ -88,6 +79,8 @@ public class SqueezerScreen extends ContainerScreen<SqueezerContainer>
 			RenderSystem.color4f( tabcol[0],  tabcol[1],  tabcol[2],  tabcol[3]);
 
 			blit(matrixStack, i + 122,j + 14 + (SqueezerScreen.TANK_SIZE_Y - temp),0 , SqueezerScreen.TANK_SIZE_X, temp, fluidTexture);
+
+
 
 		}
 	}
