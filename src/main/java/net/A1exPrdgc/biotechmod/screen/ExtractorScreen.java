@@ -43,6 +43,11 @@ public class ExtractorScreen extends ContainerScreen<ExtractorContainer>
 		this.minecraft.getTextureManager().bindTexture(GUI);
 		int i = this.guiLeft;
 		int j = this.guiTop;
+
+		int rep;
+		int rest;
+		int cpt;
+
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
 
 		FluidTank tank = container.getTileEntity().getTank();
@@ -60,7 +65,17 @@ public class ExtractorScreen extends ContainerScreen<ExtractorContainer>
 
 			Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 			RenderSystem.color4f( tabcol[0],  tabcol[1],  tabcol[2],  tabcol[3]);
+
+			rest = ExtractorScreen.TANK_SIZE_Y % fluidTexture.getHeight();
+			rep = ExtractorScreen.TANK_SIZE_Y / fluidTexture.getHeight();
+
+
 			blit(matrixStack, i + 79,j + 9 + (ExtractorScreen.TANK_SIZE_Y - temp),0 , TANK_SIZE_X, temp, fluidTexture);
+			if(temp > 16)
+			{
+				blit(matrixStack, i + 79,j + 9 + (ExtractorScreen.TANK_SIZE_Y - temp) - 16,0 , TANK_SIZE_X, temp, fluidTexture);
+			}
+
 		}
 
 	}
