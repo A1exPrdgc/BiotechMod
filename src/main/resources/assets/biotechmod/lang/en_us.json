@@ -6,6 +6,7 @@
   "item.biotechmod.resin_bucket" : "Resin bucket",
   "item.biotechmod.fire_bottle" : "Fire bottle",
   "item.biotechmod.syringe" : "Root syringe",
+  "item.biotechmod.bioenergizedflux_bucket" : "Biofuel Bucket",
   "block.biotechmod.root_block" : "Root block",
   "block.biotechmod.ash_block" : "Ash block",
   "block.biotechmod.extractor" : "Extractor",

@@ -46,6 +46,9 @@ public class ModItems
 	public static final RegistryObject<Item> RESIN_BUCKET = ITEMS.register("resin_bucket",
 			() -> new BucketItem(() -> ModFluids.RESIN_FLUID.get(),
 					new Item.Properties().maxStackSize(1).group(ModItemGroup.BIOTECHMOD_GROUP)));
+	public static final RegistryObject<Item> BIO_ENERGIZED_FLUX_BUCKET = ITEMS.register("bioenergizedflux_bucket",
+			() -> new BucketItem(() -> ModFluids.BIO_ENERGIZED_FLUX_FLUID.get(),
+					new Item.Properties().maxStackSize(1).group(ModItemGroup.BIOTECHMOD_GROUP)));
 
 
 	public static void register(IEventBus eventBus)

@@ -55,6 +55,21 @@ public class ModFluids {
 			() -> new FlowingFluidBlock(() -> ModFluids.RESIN_FLUID.get(), AbstractBlock.Properties.create(Material.WATER)
 					.doesNotBlockMovement().hardnessAndResistance(100f).noDrops()));
 
+	public static final RegistryObject<FlowingFluid> BIO_ENERGIZED_FLUX_FLUID
+			= FLUIDS.register("bioenergizedflux_fluid", () -> new ForgeFlowingFluid.Source(ModFluids.BIO_ENERGIZED_FLUX_PROPERTIES));
+
+	public static final RegistryObject<FlowingFluid> BIO_ENERGIZED_FLUX_FLOWING
+			= FLUIDS.register("bioenergizedflux_flowing", () -> new ForgeFlowingFluid.Flowing(ModFluids.BIO_ENERGIZED_FLUX_PROPERTIES));
+	public static final ForgeFlowingFluid.Properties BIO_ENERGIZED_FLUX_PROPERTIES = new ForgeFlowingFluid.Properties(
+			() -> BIO_ENERGIZED_FLUX_FLUID.get(), () -> BIO_ENERGIZED_FLUX_FLOWING.get(), FluidAttributes.builder(WATER_STILL_RL, WATER_FLOWING_RL)
+			.density(100).luminosity(0).viscosity(5).sound(SoundEvents.BLOCK_HONEY_BLOCK_BREAK).overlay(WATER_OVERLAY_RL)
+			.color(0xaeff0c)).slopeFindDistance(5).levelDecreasePerBlock(2)
+			.block(() -> ModFluids.LIQUID_BIO_ENERGIZED_FLUX_BLOCK.get()).bucket(() -> ModItems.BIO_ENERGIZED_FLUX_BUCKET.get());
+
+	public static final RegistryObject<FlowingFluidBlock> LIQUID_BIO_ENERGIZED_FLUX_BLOCK = ModBlocks.BLOCKS.register("bioenergizedflux",
+			() -> new FlowingFluidBlock(() -> ModFluids.BIO_ENERGIZED_FLUX_FLUID.get(), AbstractBlock.Properties.create(Material.WATER)
+					.doesNotBlockMovement().hardnessAndResistance(100f).noDrops()));
+
 
 
 	public static void register(IEventBus eventBus) {
